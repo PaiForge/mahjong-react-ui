@@ -1,0 +1,90 @@
+{
+  "name": "mahjong-react-ui",
+  "version": "0.1.0",
+  "description": "React UI components for Mahjong (Riichi)",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/mahjong-react-ui.css"
+  },
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "storybook dev -p 6006",
+    "build": "vite build && tsc --project tsconfig.build.json",
+    "build:storybook": "storybook build",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint src --max-warnings=0",
+    "lint:fix": "eslint src --fix",
+    "format": "prettier --write src stories",
+    "format:check": "prettier --check src stories",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "riichi-mahjong": "file:../riichi-mahjong"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^8.4.7",
+    "@storybook/react": "^8.4.7",
+    "@storybook/react-vite": "^8.4.7",
+    "@svgr/plugin-jsx": "^8.1.0",
+    "@svgr/plugin-svgo": "^8.1.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.1.0",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.17.0",
+    "eslint-config-prettier": "^9.1.0",
+    "jsdom": "^25.0.1",
+    "postcss": "^8.4.49",
+    "prettier": "^3.4.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "storybook": "^8.4.7",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vite": "^6.0.6",
+    "vite-plugin-dts": "^4.4.0",
+    "vite-plugin-svgr": "^4.5.0",
+    "vitest": "^2.1.8"
+  },
+  "keywords": [
+    "mahjong",
+    "riichi",
+    "react",
+    "ui",
+    "components"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/k0kishima/mahjong-react-ui"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "volta": {
+    "node": "24.12.0"
+  }
+}
