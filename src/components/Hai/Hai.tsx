@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import type { HaiProps } from "../../types";
-import { getHaiSizePixels } from "../../utils";
+import { getHaiSizeClasses, getHaiSizePixels } from "../../utils";
 import { getTileImage } from "../../assets/tiles";
 
 /**
@@ -19,7 +19,7 @@ export const Hai: FC<HaiProps> = ({
   onClick,
   className = "",
 }) => {
-  const { width, height } = getHaiSizePixels(size);
+  const { width, height } = getHaiSizeClasses(size, rotated);
   const tileImageSrc = getTileImage(hai);
 
   const handleClick = () => {
@@ -28,8 +28,19 @@ export const Hai: FC<HaiProps> = ({
 
   const containerClasses = [
     "inline-block",
+    "relative",
+    "overflow-hidden",
+    "bg-hai-bg",
+    "border",
+    "border-hai-border",
+    "rounded",
+    "shadow-hai",
+    "p-0.5",
+    "box-border",
     "transition-all",
     "duration-150",
+    width,
+    height,
     onClick !== undefined ? "cursor-pointer hover:brightness-95" : "",
     highlighted ? "ring-2 ring-yellow-400" : "",
     selected ? "ring-2 ring-blue-500 -translate-y-1" : "",
@@ -39,46 +50,24 @@ export const Hai: FC<HaiProps> = ({
     .filter(Boolean)
     .join(" ");
 
-  const containerWidth = rotated ? height : width;
-  const containerHeight = rotated ? width : height;
+  // 回転時の画像配置用にピクセル値が必要
+  const pixels = getHaiSizePixels(size);
+  const innerWidth = pixels.width - 6;
+  const innerHeight = pixels.height - 6;
 
-  // 牌の枠線スタイル
-  const tileStyle: React.CSSProperties = {
-    width: containerWidth,
-    height: containerHeight,
-    backgroundColor: "#f8f6f0",
-    border: "1px solid #c9c5b8",
-    borderRadius: "4px",
-    boxShadow:
-      "0 1px 2px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.5)",
-    padding: "2px",
-    boxSizing: "border-box",
-  };
+  const imageClasses = rotated
+    ? "block absolute top-1/2 left-1/2 rotate-90 origin-center"
+    : "block w-full h-full object-contain";
 
-  // 内側のサイズ（padding 2px + border 1px の両側分を引く）
-  const innerWidth = width - 6;
-  const innerHeight = height - 6;
-
-  // 画像のスタイル（回転時は元のサイズを維持してから回転）
-  const imageStyle: React.CSSProperties = rotated
+  // 回転時のみstyleで位置調整（Tailwindの任意値では計算値を使えないため）
+  const imageStyle: React.CSSProperties | undefined = rotated
     ? {
-        display: "block",
         width: innerWidth,
         height: innerHeight,
-        transform: "rotate(90deg)",
-        transformOrigin: "center center",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
         marginTop: -innerHeight / 2,
         marginLeft: -innerWidth / 2,
       }
-    : {
-        display: "block",
-        width: "100%",
-        height: "100%",
-        objectFit: "contain" as const,
-      };
+    : undefined;
 
   return (
     <div
@@ -95,9 +84,14 @@ export const Hai: FC<HaiProps> = ({
             }
           : undefined
       }
-      style={{ ...tileStyle, position: "relative", overflow: "hidden" }}
     >
-      <img src={tileImageSrc} alt="" style={imageStyle} draggable={false} />
+      <img
+        src={tileImageSrc}
+        alt=""
+        className={imageClasses}
+        style={imageStyle}
+        draggable={false}
+      />
     </div>
   );
 };

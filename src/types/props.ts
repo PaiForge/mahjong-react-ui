@@ -25,11 +25,17 @@ export interface HaiProps {
 }
 
 /**
+ * 牌の裏面の色
+ */
+export type HaiBackColor = "red" | "blue" | "yellow";
+
+/**
  * 牌の裏面コンポーネントのProps
  */
 export interface HaiBackProps {
   readonly size?: HaiSize;
   readonly rotated?: boolean;
+  readonly color?: HaiBackColor;
   readonly className?: string;
 }
 

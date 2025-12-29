@@ -1,7 +1,22 @@
 import type { FC } from "react";
-import type { HaiBackProps } from "../../types";
-import { getHaiSizePixels } from "../../utils";
+import type { HaiBackProps, HaiBackColor } from "../../types";
+import { getHaiSizeClasses, getHaiSizePixels } from "../../utils";
 import { BackImage } from "../../assets/tiles";
+
+/**
+ * 色に応じたTailwindフィルタークラスを取得
+ */
+const getColorFilterClasses = (color: HaiBackColor): string => {
+  switch (color) {
+    case "blue":
+      return "hue-rotate-[200deg] saturate-[1.2]";
+    case "yellow":
+      return "hue-rotate-[60deg] saturate-[1.3] brightness-110";
+    case "red":
+    default:
+      return "";
+  }
+};
 
 /**
  * 牌の裏面コンポーネント
@@ -12,58 +27,51 @@ import { BackImage } from "../../assets/tiles";
 export const HaiBack: FC<HaiBackProps> = ({
   size = "md",
   rotated = false,
+  color = "red",
   className = "",
 }) => {
-  const { width, height } = getHaiSizePixels(size);
+  const { width, height } = getHaiSizeClasses(size, rotated);
+  const pixels = getHaiSizePixels(size);
 
-  const containerWidth = rotated ? height : width;
-  const containerHeight = rotated ? width : height;
-
-  const containerClasses = ["inline-block", className]
+  const containerClasses = [
+    "inline-block",
+    "relative",
+    "overflow-hidden",
+    "rounded",
+    "shadow-hai-back",
+    "box-border",
+    width,
+    height,
+    className,
+  ]
     .filter(Boolean)
     .join(" ");
 
-  // 裏面用スタイル（パディングなし、画像が全面を覆う）
-  const tileStyle: React.CSSProperties = {
-    width: containerWidth,
-    height: containerHeight,
-    borderRadius: "4px",
-    boxShadow: "0 1px 2px rgba(0, 0, 0, 0.15)",
-    overflow: "hidden",
-    boxSizing: "border-box",
-  };
+  const colorFilterClasses = getColorFilterClasses(color);
 
-  // 内側のサイズ
-  const innerWidth = width;
-  const innerHeight = height;
+  const imageClasses = rotated
+    ? `block absolute top-1/2 left-1/2 rotate-90 origin-center ${colorFilterClasses}`
+    : `block w-full h-full object-cover ${colorFilterClasses}`;
 
-  // 画像のスタイル（回転時は元のサイズを維持してから回転）
-  const imageStyle: React.CSSProperties = rotated
+  // 回転時のみstyleで位置調整
+  const imageStyle: React.CSSProperties | undefined = rotated
     ? {
-        display: "block",
-        width: innerWidth,
-        height: innerHeight,
-        transform: "rotate(90deg)",
-        transformOrigin: "center center",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        marginTop: -innerHeight / 2,
-        marginLeft: -innerWidth / 2,
+        width: pixels.width,
+        height: pixels.height,
+        marginTop: -pixels.height / 2,
+        marginLeft: -pixels.width / 2,
       }
-    : {
-        display: "block",
-        width: "100%",
-        height: "100%",
-        objectFit: "cover" as const,
-      };
+    : undefined;
 
   return (
-    <div
-      className={containerClasses}
-      style={{ ...tileStyle, position: "relative" }}
-    >
-      <img src={BackImage} alt="" style={imageStyle} draggable={false} />
+    <div className={containerClasses}>
+      <img
+        src={BackImage}
+        alt=""
+        className={imageClasses}
+        style={imageStyle}
+        draggable={false}
+      />
     </div>
   );
 };

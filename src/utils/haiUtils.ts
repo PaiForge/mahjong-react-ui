@@ -57,10 +57,27 @@ export function getJihaiName(kind: HaiKindId): string | undefined {
 /**
  * サイズに対応するTailwindクラスを取得
  */
-export function getHaiSizeClasses(size: HaiSize): {
+export function getHaiSizeClasses(
+  size: HaiSize,
+  rotated = false,
+): {
   width: string;
   height: string;
 } {
+  if (rotated) {
+    switch (size) {
+      case "xs":
+        return { width: "w-hai-xs-rotated", height: "h-hai-xs-rotated" };
+      case "sm":
+        return { width: "w-hai-sm-rotated", height: "h-hai-sm-rotated" };
+      case "md":
+        return { width: "w-hai-md-rotated", height: "h-hai-md-rotated" };
+      case "lg":
+        return { width: "w-hai-lg-rotated", height: "h-hai-lg-rotated" };
+      case "xl":
+        return { width: "w-hai-xl-rotated", height: "h-hai-xl-rotated" };
+    }
+  }
   switch (size) {
     case "xs":
       return { width: "w-hai-xs", height: "h-hai-xs" };
