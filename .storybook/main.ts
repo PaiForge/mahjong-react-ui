@@ -3,7 +3,7 @@ import { resolve } from "path";
 import svgr from "vite-plugin-svgr";
 
 const config: StorybookConfig = {
-  stories: ["../stories/**/*.stories.@(js|jsx|ts|tsx)"],
+  stories: ["../src/components/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-essentials"],
   framework: {
     name: "@storybook/react-vite",
@@ -30,7 +30,16 @@ const config: StorybookConfig = {
         svgrOptions: {
           plugins: ["@svgr/plugin-svgo", "@svgr/plugin-jsx"],
           svgoConfig: {
-            plugins: [{ name: "removeViewBox", active: false }],
+            plugins: [
+              {
+                name: "preset-default",
+                params: {
+                  overrides: {
+                    removeViewBox: false,
+                  },
+                },
+              },
+            ],
           },
         },
       }),
