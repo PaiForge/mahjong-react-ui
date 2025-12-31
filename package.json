@@ -3,11 +3,14 @@
   "version": "0.1.0",
   "description": "React UI components for Mahjong (Riichi)",
   "type": "module",
-  "main": "./dist/index.cjs",
+  "main": "src/index.ts",
+  "react-native": "src/index.ts",
+  "source": "src/index.ts",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "react-native": "./src/index.ts",
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"

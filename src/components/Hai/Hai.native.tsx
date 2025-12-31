@@ -33,7 +33,7 @@ export const Hai: React.FC<HaiProps> = ({
     ];
 
     const imageStyle: StyleProp<ImageStyle> = [
-        { width: "100%", height: "100%" },
+        { width: "100%", height: "100%", backgroundColor: '#fff' },
         rotated && {
             transform: [{ rotate: "90deg" }],
             width: height,

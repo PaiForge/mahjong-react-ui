@@ -55,33 +55,47 @@ export const Hai: FC<HaiProps> = ({
   const innerWidth = pixels.width - 6;
   const innerHeight = pixels.height - 6;
 
-  const imageClasses = rotated
-    ? "block absolute top-1/2 left-1/2 rotate-90 origin-center"
-    : "block w-full h-full object-contain";
+  const imageClasses = ""; // All image styling is now handled by imageStyle
 
   // 回転時のみstyleで位置調整（Tailwindの任意値では計算値を使えないため）
-  const imageStyle: React.CSSProperties | undefined = rotated
+  const imageStyle: React.CSSProperties = rotated
     ? {
-        width: innerWidth,
-        height: innerHeight,
-        marginTop: -innerHeight / 2,
-        marginLeft: -innerWidth / 2,
-      }
-    : undefined;
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'rotate(90deg)',
+      transformOrigin: 'center',
+      width: innerWidth,
+      height: innerHeight,
+      marginTop: -innerHeight / 2,
+      marginLeft: -innerWidth / 2,
+    }
+    : {
+      display: 'block',
+      width: '100%',
+      height: '100%',
+      objectFit: 'contain',
+    };
 
   return (
     <div
       className={containerClasses}
+      style={{
+        backgroundColor: 'white',
+        width: rotated ? pixels.height : pixels.width,
+        height: rotated ? pixels.width : pixels.height,
+        ...((rotated && imageStyle) ? {} : {})
+      }}
       onClick={onClick !== undefined ? handleClick : undefined}
       role={onClick !== undefined ? "button" : undefined}
       tabIndex={onClick !== undefined ? 0 : undefined}
       onKeyDown={
         onClick !== undefined
           ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                handleClick();
-              }
+            if (e.key === "Enter" || e.key === " ") {
+              handleClick();
             }
+          }
           : undefined
       }
     >
