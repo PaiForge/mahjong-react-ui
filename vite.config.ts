@@ -14,8 +14,12 @@ export default defineConfig({
         svgoConfig: {
           plugins: [
             {
-              name: "removeViewBox",
-              active: false, // viewBoxを保持
+              name: "preset-default",
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
             },
           ],
         },
@@ -35,13 +39,14 @@ export default defineConfig({
       fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime", "riichi-mahjong"],
+      external: ["react", "react-dom", "react/jsx-runtime", "@pai-forge/riichi-mahjong", "react-native"],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
           "react/jsx-runtime": "jsxRuntime",
-          "riichi-mahjong": "RiichiMahjong",
+          "@pai-forge/riichi-mahjong": "RiichiMahjong",
+          "react-native": "ReactNative",
         },
       },
     },
