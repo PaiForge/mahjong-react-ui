@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import type { HaiKindId, CompletedMentsu } from "riichi-mahjong";
+import type { HaiKindId, CompletedMentsu } from "@pai-forge/riichi-mahjong";
 import type { TehaiProps } from "../../types";
 import { Hai } from "../Hai";
 import { Furo } from "../Furo";

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { HaiKind, MentsuType, FuroType, Tacha } from "riichi-mahjong";
+import { HaiKind, MentsuType, FuroType, Tacha } from "@pai-forge/riichi-mahjong";
 import { Furo } from ".";
 
 const meta: Meta<typeof Furo> = {

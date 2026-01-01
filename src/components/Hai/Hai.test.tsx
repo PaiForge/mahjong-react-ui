@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { HaiKind } from "riichi-mahjong";
+import { HaiKind } from "@pai-forge/riichi-mahjong";
 import { Hai } from "./Hai";
 
 describe("Hai", () => {

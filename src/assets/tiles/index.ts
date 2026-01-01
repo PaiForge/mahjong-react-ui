@@ -1,4 +1,4 @@
-import { HaiKind, type HaiKindId } from "riichi-mahjong";
+import { HaiKind, type HaiKindId } from "@pai-forge/riichi-mahjong";
 
 // 萬子
 import Man1 from "./Man1.png";

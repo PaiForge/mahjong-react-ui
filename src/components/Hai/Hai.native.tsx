@@ -16,6 +16,7 @@ export const Hai: React.FC<HaiProps> = ({
     selected = false,
     onClick,
     className, // Ignored in Native
+    style,
 }) => {
     const tileImageSrc = getTileImage(hai);
     const { width, height } = getHaiSizePixels(size);
@@ -30,10 +31,11 @@ export const Hai: React.FC<HaiProps> = ({
         highlighted && styles.highlighted,
         selected && styles.selected,
         dimmed && styles.dimmed,
+        style,
     ];
 
     const imageStyle: StyleProp<ImageStyle> = [
-        { width: "100%", height: "100%", backgroundColor: '#fff' },
+        { width: "100%", height: "100%", backgroundColor: '#fff', borderRadius: 6 },
         rotated && {
             transform: [{ rotate: "90deg" }],
             width: height,
@@ -46,7 +48,7 @@ export const Hai: React.FC<HaiProps> = ({
 
     const content = (
         <Image
-            source={tileImageSrc as any} // Cast because ImageSourcePropType implies number but we might have object/string from Metro
+            source={tileImageSrc as any}
             style={imageStyle}
             resizeMode="contain"
         />
@@ -66,13 +68,13 @@ export const Hai: React.FC<HaiProps> = ({
 const styles = StyleSheet.create({
     container: {
         backgroundColor: "#fff",
-        borderRadius: 2,
+        borderRadius: 6,
         overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",
         // simple shadow simulation
         borderWidth: 1,
-        borderColor: "#ccc",
+        borderColor: "red", // DEBUG: Changed to red to verify update
     },
     highlighted: {
         borderColor: "#fbbf24", // yellow-400

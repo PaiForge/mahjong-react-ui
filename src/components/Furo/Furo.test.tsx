@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
-import { HaiKind, MentsuType, FuroType, Tacha } from "riichi-mahjong";
+import { HaiKind, MentsuType, FuroType, Tacha } from "@pai-forge/riichi-mahjong";
 import { Furo } from "./Furo";
 
 describe("Furo", () => {

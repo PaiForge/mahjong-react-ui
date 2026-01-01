@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { HaiKind } from "riichi-mahjong";
+import { HaiKind } from "@pai-forge/riichi-mahjong";
 import { Hai } from ".";
 
 const meta: Meta<typeof Hai> = {

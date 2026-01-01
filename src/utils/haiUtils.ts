@@ -1,4 +1,4 @@
-import { HaiKind, HaiType, type HaiKindId } from "riichi-mahjong";
+import { HaiKind, HaiType, type HaiKindId } from "@pai-forge/riichi-mahjong";
 import type { HaiSize } from "../types";
 
 /**

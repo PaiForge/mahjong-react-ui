@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import type { HaiProps } from "../../types";
-import { getHaiSizeClasses, getHaiSizePixels } from "../../utils";
+import { getHaiSizePixels } from "../../utils";
 import { getTileImage } from "../../assets/tiles";
+import { View, Image, Pressable, StyleSheet, type ImageSourcePropType } from "react-native";
 
 /**
  * 牌コンポーネント
@@ -18,94 +19,89 @@ export const Hai: FC<HaiProps> = ({
   selected = false,
   onClick,
   className = "",
+  style,
 }) => {
-  const { width, height } = getHaiSizeClasses(size, rotated);
+  const pixels = getHaiSizePixels(size);
+  const width = rotated ? pixels.height : pixels.width;
+  const height = rotated ? pixels.width : pixels.height;
+
   const tileImageSrc = getTileImage(hai);
 
-  const handleClick = () => {
+  const handlePress = () => {
     onClick?.(hai);
   };
 
-  const containerClasses = [
-    "inline-block",
-    "relative",
-    "overflow-hidden",
-    "bg-hai-bg",
-    "border",
-    "border-hai-border",
-    "rounded",
-    "shadow-hai",
-    "p-0.5",
-    "box-border",
-    "transition-all",
-    "duration-150",
-    width,
-    height,
-    onClick !== undefined ? "cursor-pointer hover:brightness-95" : "",
-    highlighted ? "ring-2 ring-yellow-400" : "",
-    selected ? "ring-2 ring-blue-500 -translate-y-1" : "",
-    dimmed ? "opacity-50" : "",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const containerStyle = [
+    styles.container,
+    {
+      width,
+      height,
+      opacity: dimmed ? 0.5 : 1,
+    },
+    // Highlighted (Yellow ring)
+    highlighted && {
+      borderColor: '#FACC15', // yellow-400
+      borderWidth: 2,
+    },
+    // Selected (Blue ring + lift)
+    selected && {
+      borderColor: '#3B82F6', // blue-500
+      borderWidth: 2,
+      transform: [{ translateY: -4 }],
+    },
+    style,
+  ];
 
-  // 回転時の画像配置用にピクセル値が必要
-  const pixels = getHaiSizePixels(size);
-  const innerWidth = pixels.width - 6;
-  const innerHeight = pixels.height - 6;
+  // Inner dimensions for the image (accounting for padding/border roughly if needed, 
+  // but usually simple contain is enough if container has padding)
+  // Original had p-0.5 (2px).
 
-  const imageClasses = ""; // All image styling is now handled by imageStyle
-
-  // 回転時のみstyleで位置調整（Tailwindの任意値では計算値を使えないため）
-  const imageStyle: React.CSSProperties = rotated
-    ? {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'rotate(90deg)',
-      transformOrigin: 'center',
-      width: innerWidth,
-      height: innerHeight,
-      marginTop: -innerHeight / 2,
-      marginLeft: -innerWidth / 2,
-    }
-    : {
-      display: 'block',
-      width: '100%',
-      height: '100%',
-      objectFit: 'contain',
-    };
+  // Image style
+  const imageStyle = [
+    styles.image,
+    rotated && {
+      width: pixels.width - 6,
+      height: pixels.height - 6,
+      transform: [{ rotate: '90deg' }],
+    },
+  ];
 
   return (
-    <div
-      className={containerClasses}
-      style={{
-        backgroundColor: 'white',
-        width: rotated ? pixels.height : pixels.width,
-        height: rotated ? pixels.width : pixels.height,
-        ...((rotated && imageStyle) ? {} : {})
-      }}
-      onClick={onClick !== undefined ? handleClick : undefined}
-      role={onClick !== undefined ? "button" : undefined}
-      tabIndex={onClick !== undefined ? 0 : undefined}
-      onKeyDown={
-        onClick !== undefined
-          ? (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              handleClick();
-            }
-          }
-          : undefined
-      }
+    <Pressable
+      onPress={onClick ? handlePress : undefined}
+      style={containerStyle as any}
+      // Accessibilty props
+      accessibilityRole="button"
+      accessibilityLabel={onClick ? "Mahjong Tile" : undefined}
     >
-      <img
-        src={tileImageSrc}
-        alt=""
-        className={imageClasses}
+      <Image
+        source={tileImageSrc as ImageSourcePropType}
         style={imageStyle}
-        draggable={false}
+        resizeMode="contain"
       />
-    </div>
+    </Pressable>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#f8f6f0', // hai-bg
+    borderColor: '#c9c5b8',     // hai-border
+    borderWidth: 1,
+    borderRadius: 4,            // rounded
+    overflow: 'hidden',
+    padding: 2,                 // p-0.5
+    justifyContent: 'center',
+    alignItems: 'center',
+    // Shadow (shadow-hai)
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+  },
+});

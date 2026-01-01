@@ -3,7 +3,7 @@ import type {
   Tehai as TehaiType,
   CompletedMentsu,
   Furo as FuroType,
-} from "riichi-mahjong";
+} from "@pai-forge/riichi-mahjong";
 
 /**
  * 牌のサイズバリアント
@@ -22,6 +22,7 @@ export interface HaiProps {
   readonly selected?: boolean;
   readonly onClick?: (hai: HaiKindId) => void;
   readonly className?: string;
+  readonly style?: any;
 }
 
 /**

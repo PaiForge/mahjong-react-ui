@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { HaiKind, MentsuType, FuroType, Tacha } from "riichi-mahjong";
+import { HaiKind, MentsuType, FuroType, Tacha } from "@pai-forge/riichi-mahjong";
 import { Tehai } from "./Tehai";
 
 describe("Tehai", () => {

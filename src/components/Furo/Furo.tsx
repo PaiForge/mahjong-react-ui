@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { MentsuType, FuroType, Tacha, type HaiKindId } from "riichi-mahjong";
+import { MentsuType, FuroType, Tacha, type HaiKindId } from "@pai-forge/riichi-mahjong";
 import type { FuroProps } from "../../types";
 import { Hai } from "../Hai";
 import { HaiBack } from "../HaiBack";
