@@ -17,6 +17,7 @@ const config: StorybookConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       "riichi-mahjong": resolve(__dirname, "../../riichi-mahjong/dist"),
+      "react-native": "react-native-web",
     };
     config.optimizeDeps = config.optimizeDeps ?? {};
     config.optimizeDeps.include = [
