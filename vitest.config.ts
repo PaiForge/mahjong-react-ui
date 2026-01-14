@@ -29,7 +29,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": resolve(__dirname, "./src"),
-      "riichi-mahjong": resolve(__dirname, "../riichi-mahjong/dist/index.js"),
+      "react-native": "react-native-web",
     },
   },
 });
