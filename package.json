@@ -1,6 +1,6 @@
 {
   "name": "@pai-forge/mahjong-react-ui",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "React UI components for Mahjong (Riichi)",
   "type": "module",
   "publishConfig": {
@@ -44,6 +44,7 @@
     "ajv": "^8.17.1"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.2",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/react": "^8.4.7",
     "@storybook/react-vite": "^8.4.7",
@@ -86,7 +87,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/k0kishima/mahjong-react-ui"
+    "url": "git+https://github.com/PaiForge/mahjong-react-ui.git"
   },
   "engines": {
     "node": ">=20.0.0"

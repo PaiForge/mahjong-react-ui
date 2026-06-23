@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { MentsuType, FuroType, Tacha, type HaiKindId } from "@pai-forge/riichi-mahjong";
+import { MentsuType, Tacha, type HaiKindId } from "@pai-forge/riichi-mahjong";
 import type { FuroProps } from "../../types";
 import { Hai } from "../Hai";
 import { HaiBack } from "../HaiBack";
@@ -36,10 +36,8 @@ export const Furo: FC<FuroProps> = ({
 
   const rotatedIndex = getRotatedIndex();
 
-  // 暗槓の場合
-  const isAnkan =
-    type === MentsuType.Kantsu &&
-    (furo === undefined || furo.type !== FuroType.Daiminkan);
+  // 暗槓の場合（副露されていないカンツのみ。加槓・大明槓は明槓なので含めない）
+  const isAnkan = type === MentsuType.Kantsu && furo === undefined;
 
   const containerClasses = ["inline-flex", "items-end", "gap-px", className]
     .filter(Boolean)
