@@ -73,9 +73,8 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",
-        // simple shadow simulation
         borderWidth: 1,
-        borderColor: "red", // DEBUG: Changed to red to verify update
+        borderColor: "#c9c5b8", // hai-border（web 実装と統一）
     },
     highlighted: {
         borderColor: "#fbbf24", // yellow-400
