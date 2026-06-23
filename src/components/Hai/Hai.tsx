@@ -2,7 +2,7 @@ import type { FC } from "react";
 import type { HaiProps } from "../../types";
 import { getHaiSizePixels } from "../../utils";
 import { getTileImage } from "../../assets/tiles";
-import { View, Image, Pressable, StyleSheet, type ImageSourcePropType } from "react-native";
+import { Image, Pressable, StyleSheet, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
 
 /**
  * 牌コンポーネント
@@ -18,7 +18,6 @@ export const Hai: FC<HaiProps> = ({
   dimmed = false,
   selected = false,
   onClick,
-  className = "",
   style,
 }) => {
   const pixels = getHaiSizePixels(size);
@@ -73,7 +72,7 @@ export const Hai: FC<HaiProps> = ({
   return (
     <Pressable
       onPress={onClick ? handlePress : undefined}
-      style={containerStyle as any}
+      style={containerStyle as StyleProp<ViewStyle>}
       // Accessibilty props
       accessibilityRole="button"
       accessibilityLabel={onClick ? "Mahjong Tile" : undefined}

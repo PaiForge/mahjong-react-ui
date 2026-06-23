@@ -25,7 +25,7 @@ lerna-debug.log*
 
 # Lock files
 yarn.lock
-pnpm-lock.yaml
+# pnpm-lock.yaml は CI の再現性確保のためコミットする（--frozen-lockfile で利用）
 
 
 # Test coverage
