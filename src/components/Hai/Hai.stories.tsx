@@ -186,7 +186,7 @@ export const Interactive: Story = {
                     hai={(HaiKind.ManZu1 + i) as typeof HaiKind.ManZu1}
                     size="lg"
                     onClick={(hai) => {
-                        alert(`Clicked tile: ${hai}`);
+                        alert(`Clicked tile: ${String(hai)}`);
                     }}
                 />
             ))}

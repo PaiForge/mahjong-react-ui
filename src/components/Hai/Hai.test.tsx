@@ -38,21 +38,24 @@ describe("Hai", () => {
     expect(handleClick).toHaveBeenCalledWith(HaiKind.ManZu1);
   });
 
-  it("should apply highlighted class", () => {
+  // react-native(-web) 実装では、状態はインラインスタイル（色・opacity・transform）で表現される
+  it("should apply highlighted styling (yellow border)", () => {
     const { container } = render(<Hai hai={HaiKind.ManZu1} highlighted />);
     const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.className).toContain("ring-yellow-400");
+    expect(wrapper.getAttribute("style")).toContain("rgb(250, 204, 21)");
   });
 
-  it("should apply selected class", () => {
+  it("should apply selected styling (blue border + lift)", () => {
     const { container } = render(<Hai hai={HaiKind.ManZu1} selected />);
     const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.className).toContain("ring-blue-500");
+    const style = wrapper.getAttribute("style") ?? "";
+    expect(style).toContain("rgb(59, 130, 246)");
+    expect(style).toContain("translateY(-4px)");
   });
 
-  it("should apply dimmed class", () => {
+  it("should apply dimmed styling (opacity)", () => {
     const { container } = render(<Hai hai={HaiKind.ManZu1} dimmed />);
     const wrapper = container.firstChild as HTMLElement;
-    expect(wrapper.className).toContain("opacity-50");
+    expect(wrapper.getAttribute("style")).toContain("opacity: 0.5");
   });
 });

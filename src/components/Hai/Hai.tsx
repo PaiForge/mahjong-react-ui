@@ -2,7 +2,7 @@ import type { FC } from "react";
 import type { HaiProps } from "../../types";
 import { getHaiSizePixels } from "../../utils";
 import { getTileImage } from "../../assets/tiles";
-import { View, Image, Pressable, StyleSheet, type ImageSourcePropType } from "react-native";
+import { Image, Pressable, StyleSheet, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
 
 /**
  * 牌コンポーネント
@@ -18,7 +18,6 @@ export const Hai: FC<HaiProps> = ({
   dimmed = false,
   selected = false,
   onClick,
-  className = "",
   style,
 }) => {
   const pixels = getHaiSizePixels(size);
@@ -37,6 +36,9 @@ export const Hai: FC<HaiProps> = ({
       width,
       height,
       opacity: dimmed ? 0.5 : 1,
+      // 回転時はレイアウトボックスのはみ出しを許容
+      // （視覚的な絵柄はコンテナ内に収まるが、レイアウトボックスは縦長のままのため）
+      overflow: rotated ? 'visible' : 'hidden',
     },
     // Highlighted (Yellow ring)
     highlighted && {
@@ -57,6 +59,7 @@ export const Hai: FC<HaiProps> = ({
   // Original had p-0.5 (2px).
 
   // Image style
+  // 回転時は元の縦長サイズのまま回転（overflow: visible で表示）
   const imageStyle = [
     styles.image,
     rotated && {
@@ -69,7 +72,7 @@ export const Hai: FC<HaiProps> = ({
   return (
     <Pressable
       onPress={onClick ? handlePress : undefined}
-      style={containerStyle as any}
+      style={containerStyle as StyleProp<ViewStyle>}
       // Accessibilty props
       accessibilityRole="button"
       accessibilityLabel={onClick ? "Mahjong Tile" : undefined}
@@ -85,6 +88,7 @@ export const Hai: FC<HaiProps> = ({
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',            // Web環境で flexbox を有効にする
     backgroundColor: '#f8f6f0', // hai-bg
     borderColor: '#c9c5b8',     // hai-border
     borderWidth: 1,

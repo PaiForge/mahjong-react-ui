@@ -102,7 +102,10 @@ describe("Tehai", () => {
       />,
     );
 
-    const wrappers = container.querySelectorAll(".ring-blue-500");
-    expect(wrappers.length).toBe(2);
+    // 選択牌は青ボーダー＋持ち上げ(translateY)で表現される（react-native-web 実装）
+    const selected = Array.from(
+      container.querySelectorAll<HTMLElement>("[style]"),
+    ).filter((el) => el.getAttribute("style")?.includes("translateY(-4px)"));
+    expect(selected.length).toBe(2);
   });
 });

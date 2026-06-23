@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, Pressable, View, StyleSheet, StyleProp, ViewStyle, ImageStyle } from "react-native";
+import { Image, Pressable, View, StyleSheet } from "react-native";
+import type { StyleProp, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native";
 import type { HaiProps } from "../../types";
 import { getTileImage } from "../../assets/tiles";
 import { getHaiSizePixels } from "../../utils";
@@ -15,7 +16,7 @@ export const Hai: React.FC<HaiProps> = ({
     dimmed = false,
     selected = false,
     onClick,
-    className, // Ignored in Native
+    // className は Native では無視する
     style,
 }) => {
     const tileImageSrc = getTileImage(hai);
@@ -48,7 +49,7 @@ export const Hai: React.FC<HaiProps> = ({
 
     const content = (
         <Image
-            source={tileImageSrc as any}
+            source={tileImageSrc as ImageSourcePropType}
             style={imageStyle}
             resizeMode="contain"
         />
@@ -56,7 +57,7 @@ export const Hai: React.FC<HaiProps> = ({
 
     if (onClick) {
         return (
-            <Pressable onPress={() => onClick(hai)} style={containerStyle}>
+            <Pressable onPress={() => { onClick(hai); }} style={containerStyle}>
                 {content}
             </Pressable>
         );

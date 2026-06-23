@@ -1,3 +1,4 @@
+import type { StyleProp, ViewStyle } from "react-native";
 import type {
   HaiKindId,
   Tehai as TehaiType,
@@ -22,7 +23,7 @@ export interface HaiProps {
   readonly selected?: boolean;
   readonly onClick?: (hai: HaiKindId) => void;
   readonly className?: string;
-  readonly style?: any;
+  readonly style?: StyleProp<ViewStyle>;
 }
 
 /**
