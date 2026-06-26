@@ -17,17 +17,21 @@ export function kindIdToHaiType(kind: HaiKindId): HaiType {
   return HaiType.Jihai;
 }
 
+/** 数牌の牌種ごとの開始ID（1の牌のHaiKindId） */
+const SUUHAI_START_KIND: Partial<Record<HaiType, HaiKindId>> = {
+  [HaiType.Manzu]: HaiKind.ManZu1,
+  [HaiType.Pinzu]: HaiKind.PinZu1,
+  [HaiType.Souzu]: HaiKind.SouZu1,
+};
+
 /**
  * 牌種IDから数値(1-9)を取得する
  * 字牌の場合は undefined を返す
  */
 export function haiKindToNumber(kind: HaiKindId): number | undefined {
-  const type = kindIdToHaiType(kind);
-  if (type === HaiType.Jihai) return undefined;
-
-  if (type === HaiType.Manzu) return kind - HaiKind.ManZu1 + 1;
-  if (type === HaiType.Pinzu) return kind - HaiKind.PinZu1 + 1;
-  return kind - HaiKind.SouZu1 + 1;
+  const start = SUUHAI_START_KIND[kindIdToHaiType(kind)];
+  if (start === undefined) return undefined;
+  return kind - start + 1;
 }
 
 /**
