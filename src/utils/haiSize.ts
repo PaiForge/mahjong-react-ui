@@ -65,3 +65,16 @@ export function getHaiSizePixels(size: HaiSize): {
       return { width: 72, height: 101 };
   }
 }
+
+/**
+ * 回転を考慮した牌の表示寸法(px)を取得
+ *
+ * 回転時はレイアウトボックスの幅と高さを入れ替える。
+ */
+export function getOrientedHaiSizePixels(
+  size: HaiSize,
+  rotated: boolean,
+): { width: number; height: number } {
+  const { width, height } = getHaiSizePixels(size);
+  return rotated ? { width: height, height: width } : { width, height };
+}
