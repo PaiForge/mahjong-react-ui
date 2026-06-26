@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import type { HaiProps } from "../../types";
 import { getHaiSizePixels } from "../../utils";
+import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
 import { getTileImage } from "../../assets/tiles";
 import { Image, Pressable, StyleSheet, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
 
@@ -42,14 +43,14 @@ export const Hai: FC<HaiProps> = ({
     },
     // Highlighted (Yellow ring)
     highlighted && {
-      borderColor: '#FACC15', // yellow-400
+      borderColor: HAI_COLORS.highlight,
       borderWidth: 2,
     },
     // Selected (Blue ring + lift)
     selected && {
-      borderColor: '#3B82F6', // blue-500
+      borderColor: HAI_COLORS.selected,
       borderWidth: 2,
-      transform: [{ translateY: -4 }],
+      transform: [{ translateY: HAI_SELECTED_LIFT }],
     },
     style,
   ];
@@ -88,9 +89,9 @@ export const Hai: FC<HaiProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',            // Web環境で flexbox を有効にする
-    backgroundColor: '#f8f6f0', // hai-bg
-    borderColor: '#c9c5b8',     // hai-border
+    display: 'flex',                       // Web環境で flexbox を有効にする
+    backgroundColor: HAI_COLORS.background, // hai-bg
+    borderColor: HAI_COLORS.border,         // hai-border
     borderWidth: 1,
     borderRadius: 4,            // rounded
     overflow: 'hidden',

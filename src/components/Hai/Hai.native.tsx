@@ -4,6 +4,7 @@ import type { StyleProp, ViewStyle, ImageStyle, ImageSourcePropType } from "reac
 import type { HaiProps } from "../../types";
 import { getTileImage } from "../../assets/tiles";
 import { getHaiSizePixels } from "../../utils";
+import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
 
 /**
  * 牌コンポーネント (Native)
@@ -74,16 +75,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         borderWidth: 1,
-        borderColor: "#c9c5b8", // hai-border（web 実装と統一）
+        borderColor: HAI_COLORS.border, // hai-border（web 実装と統一）
     },
     highlighted: {
-        borderColor: "#fbbf24", // yellow-400
+        borderColor: HAI_COLORS.highlight, // yellow-400
         borderWidth: 2,
     },
     selected: {
-        borderColor: "#3b82f6", // blue-500
+        borderColor: HAI_COLORS.selected, // blue-500
         borderWidth: 2,
-        transform: [{ translateY: -4 }],
+        transform: [{ translateY: HAI_SELECTED_LIFT }],
     },
     dimmed: {
         opacity: 0.5,
