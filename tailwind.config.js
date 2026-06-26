@@ -1,3 +1,16 @@
+import { HAI_DIMENSIONS } from "./src/theme/haiDimensions";
+
+// 牌サイズのTailwindユーティリティを単一の真実源(HAI_DIMENSIONS)から生成する。
+// 回転時は幅と高さを入れ替える。
+const haiWidth = {};
+const haiHeight = {};
+for (const [size, { width, height }] of Object.entries(HAI_DIMENSIONS)) {
+  haiWidth[`hai-${size}`] = `${width}px`;
+  haiHeight[`hai-${size}`] = `${height}px`;
+  haiWidth[`hai-${size}-rotated`] = `${height}px`;
+  haiHeight[`hai-${size}-rotated`] = `${width}px`;
+}
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}", "./stories/**/*.{js,ts,jsx,tsx}"],
@@ -16,32 +29,8 @@ export default {
           highlighted: "#FEF3C7",
         },
       },
-      width: {
-        "hai-xs": "24px",
-        "hai-sm": "32px",
-        "hai-md": "44px",
-        "hai-lg": "56px",
-        "hai-xl": "72px",
-        // 回転時用（高さと幅が入れ替わる）
-        "hai-xs-rotated": "34px",
-        "hai-sm-rotated": "45px",
-        "hai-md-rotated": "62px",
-        "hai-lg-rotated": "78px",
-        "hai-xl-rotated": "101px",
-      },
-      height: {
-        "hai-xs": "34px",
-        "hai-sm": "45px",
-        "hai-md": "62px",
-        "hai-lg": "78px",
-        "hai-xl": "101px",
-        // 回転時用（高さと幅が入れ替わる）
-        "hai-xs-rotated": "24px",
-        "hai-sm-rotated": "32px",
-        "hai-md-rotated": "44px",
-        "hai-lg-rotated": "56px",
-        "hai-xl-rotated": "72px",
-      },
+      width: haiWidth,
+      height: haiHeight,
       spacing: {
         "hai-gap": "2px",
         "furo-gap": "8px",

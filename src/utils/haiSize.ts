@@ -1,4 +1,5 @@
 import type { HaiSize } from "../types";
+import { HAI_DIMENSIONS } from "../theme/haiDimensions";
 
 /**
  * 牌の表示サイズに関するユーティリティ（プレゼンテーション層）。
@@ -52,18 +53,7 @@ export function getHaiSizePixels(size: HaiSize): {
   width: number;
   height: number;
 } {
-  switch (size) {
-    case "xs":
-      return { width: 24, height: 34 };
-    case "sm":
-      return { width: 32, height: 45 };
-    case "md":
-      return { width: 44, height: 62 };
-    case "lg":
-      return { width: 56, height: 78 };
-    case "xl":
-      return { width: 72, height: 101 };
-  }
+  return { ...HAI_DIMENSIONS[size] };
 }
 
 /**
