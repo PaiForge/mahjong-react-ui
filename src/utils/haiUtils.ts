@@ -55,6 +55,31 @@ export function getJihaiName(kind: HaiKindId): string | undefined {
 }
 
 /**
+ * サイズに対応するTailwindクラス
+ *
+ * Tailwindのパージはクラス名をリテラルとして静的に検出するため、
+ * テンプレート文字列での動的生成は行わず、完全なクラス名を保持する。
+ */
+const HAI_SIZE_CLASSES: Record<HaiSize, { width: string; height: string }> = {
+  xs: { width: "w-hai-xs", height: "h-hai-xs" },
+  sm: { width: "w-hai-sm", height: "h-hai-sm" },
+  md: { width: "w-hai-md", height: "h-hai-md" },
+  lg: { width: "w-hai-lg", height: "h-hai-lg" },
+  xl: { width: "w-hai-xl", height: "h-hai-xl" },
+};
+
+const HAI_SIZE_CLASSES_ROTATED: Record<
+  HaiSize,
+  { width: string; height: string }
+> = {
+  xs: { width: "w-hai-xs-rotated", height: "h-hai-xs-rotated" },
+  sm: { width: "w-hai-sm-rotated", height: "h-hai-sm-rotated" },
+  md: { width: "w-hai-md-rotated", height: "h-hai-md-rotated" },
+  lg: { width: "w-hai-lg-rotated", height: "h-hai-lg-rotated" },
+  xl: { width: "w-hai-xl-rotated", height: "h-hai-xl-rotated" },
+};
+
+/**
  * サイズに対応するTailwindクラスを取得
  */
 export function getHaiSizeClasses(
@@ -64,32 +89,7 @@ export function getHaiSizeClasses(
   width: string;
   height: string;
 } {
-  if (rotated) {
-    switch (size) {
-      case "xs":
-        return { width: "w-hai-xs-rotated", height: "h-hai-xs-rotated" };
-      case "sm":
-        return { width: "w-hai-sm-rotated", height: "h-hai-sm-rotated" };
-      case "md":
-        return { width: "w-hai-md-rotated", height: "h-hai-md-rotated" };
-      case "lg":
-        return { width: "w-hai-lg-rotated", height: "h-hai-lg-rotated" };
-      case "xl":
-        return { width: "w-hai-xl-rotated", height: "h-hai-xl-rotated" };
-    }
-  }
-  switch (size) {
-    case "xs":
-      return { width: "w-hai-xs", height: "h-hai-xs" };
-    case "sm":
-      return { width: "w-hai-sm", height: "h-hai-sm" };
-    case "md":
-      return { width: "w-hai-md", height: "h-hai-md" };
-    case "lg":
-      return { width: "w-hai-lg", height: "h-hai-lg" };
-    case "xl":
-      return { width: "w-hai-xl", height: "h-hai-xl" };
-  }
+  return (rotated ? HAI_SIZE_CLASSES_ROTATED : HAI_SIZE_CLASSES)[size];
 }
 
 /**
