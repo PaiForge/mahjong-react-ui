@@ -1,22 +1,8 @@
 import type { FC } from "react";
-import type { HaiBackProps, HaiBackColor } from "../../types";
-import { getHaiSizeClasses, getHaiSizePixels } from "../../utils";
+import type { HaiBackProps } from "../../types";
+import { cx, getHaiSizeClasses } from "../../utils";
 import { BackImage } from "../../assets/tiles";
-
-/**
- * 色に応じたTailwindフィルタークラスを取得
- */
-const getColorFilterClasses = (color: HaiBackColor): string => {
-  switch (color) {
-    case "blue":
-      return "hue-rotate-[200deg] saturate-[1.2]";
-    case "yellow":
-      return "hue-rotate-[60deg] saturate-[1.3] brightness-110";
-    case "red":
-    default:
-      return "";
-  }
-};
+import { getColorFilterClasses, getRotatedImageStyle } from "./haiBackStyle";
 
 /**
  * 牌の裏面コンポーネント
@@ -31,9 +17,8 @@ export const HaiBack: FC<HaiBackProps> = ({
   className = "",
 }) => {
   const { width, height } = getHaiSizeClasses(size, rotated);
-  const pixels = getHaiSizePixels(size);
 
-  const containerClasses = [
+  const containerClasses = cx(
     "inline-block",
     "relative",
     "overflow-hidden",
@@ -43,25 +28,18 @@ export const HaiBack: FC<HaiBackProps> = ({
     width,
     height,
     className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
 
-  const colorFilterClasses = getColorFilterClasses(color);
-
-  const imageClasses = rotated
-    ? `block absolute top-1/2 left-1/2 rotate-90 origin-center ${colorFilterClasses}`
-    : `block w-full h-full object-cover ${colorFilterClasses}`;
+  const imageClasses = cx(
+    "block",
+    rotated
+      ? "absolute top-1/2 left-1/2 rotate-90 origin-center"
+      : "w-full h-full object-cover",
+    getColorFilterClasses(color),
+  );
 
   // 回転時のみstyleで位置調整
-  const imageStyle: React.CSSProperties | undefined = rotated
-    ? {
-        width: pixels.width,
-        height: pixels.height,
-        marginTop: -pixels.height / 2,
-        marginLeft: -pixels.width / 2,
-      }
-    : undefined;
+  const imageStyle = rotated ? getRotatedImageStyle(size) : undefined;
 
   return (
     <div className={containerClasses}>

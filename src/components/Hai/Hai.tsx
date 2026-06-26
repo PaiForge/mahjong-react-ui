@@ -1,8 +1,64 @@
 import type { FC } from "react";
-import type { HaiProps } from "../../types";
-import { getHaiSizePixels } from "../../utils";
+import type { HaiProps, HaiSize } from "../../types";
+import { getHaiSizePixels, getOrientedHaiSizePixels } from "../../utils";
+import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
 import { getTileImage } from "../../assets/tiles";
 import { Image, Pressable, StyleSheet, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
+
+/** 状態(回転・ハイライト・選択・薄表示)に応じたコンテナスタイルを組み立てる */
+const buildContainerStyle = (
+  size: HaiSize,
+  state: Pick<
+    HaiProps,
+    "rotated" | "highlighted" | "selected" | "dimmed" | "style"
+  >,
+): StyleProp<ViewStyle> => {
+  const {
+    rotated = false,
+    highlighted = false,
+    selected = false,
+    dimmed = false,
+    style,
+  } = state;
+  const { width, height } = getOrientedHaiSizePixels(size, rotated);
+
+  return [
+    styles.container,
+    {
+      width,
+      height,
+      opacity: dimmed ? 0.5 : 1,
+      // 回転時はレイアウトボックスのはみ出しを許容
+      // （視覚的な絵柄はコンテナ内に収まるが、レイアウトボックスは縦長のままのため）
+      overflow: rotated ? 'visible' : 'hidden',
+    },
+    // Highlighted (Yellow ring)
+    highlighted && {
+      borderColor: HAI_COLORS.highlight,
+      borderWidth: 2,
+    },
+    // Selected (Blue ring + lift)
+    selected && {
+      borderColor: HAI_COLORS.selected,
+      borderWidth: 2,
+      transform: [{ translateY: HAI_SELECTED_LIFT }],
+    },
+    style,
+  ];
+};
+
+/** 回転時は元の縦長サイズのまま90度回転させる（overflow: visible で表示） */
+const buildImageStyle = (size: HaiSize, rotated: boolean) => {
+  const pixels = getHaiSizePixels(size);
+  return [
+    styles.image,
+    rotated && {
+      width: pixels.width - 6,
+      height: pixels.height - 6,
+      transform: [{ rotate: '90deg' }],
+    },
+  ];
+};
 
 /**
  * 牌コンポーネント
@@ -20,59 +76,26 @@ export const Hai: FC<HaiProps> = ({
   onClick,
   style,
 }) => {
-  const pixels = getHaiSizePixels(size);
-  const width = rotated ? pixels.height : pixels.width;
-  const height = rotated ? pixels.width : pixels.height;
-
   const tileImageSrc = getTileImage(hai);
 
   const handlePress = () => {
     onClick?.(hai);
   };
 
-  const containerStyle = [
-    styles.container,
-    {
-      width,
-      height,
-      opacity: dimmed ? 0.5 : 1,
-      // 回転時はレイアウトボックスのはみ出しを許容
-      // （視覚的な絵柄はコンテナ内に収まるが、レイアウトボックスは縦長のままのため）
-      overflow: rotated ? 'visible' : 'hidden',
-    },
-    // Highlighted (Yellow ring)
-    highlighted && {
-      borderColor: '#FACC15', // yellow-400
-      borderWidth: 2,
-    },
-    // Selected (Blue ring + lift)
-    selected && {
-      borderColor: '#3B82F6', // blue-500
-      borderWidth: 2,
-      transform: [{ translateY: -4 }],
-    },
+  const containerStyle = buildContainerStyle(size, {
+    rotated,
+    highlighted,
+    selected,
+    dimmed,
     style,
-  ];
+  });
 
-  // Inner dimensions for the image (accounting for padding/border roughly if needed, 
-  // but usually simple contain is enough if container has padding)
-  // Original had p-0.5 (2px).
-
-  // Image style
-  // 回転時は元の縦長サイズのまま回転（overflow: visible で表示）
-  const imageStyle = [
-    styles.image,
-    rotated && {
-      width: pixels.width - 6,
-      height: pixels.height - 6,
-      transform: [{ rotate: '90deg' }],
-    },
-  ];
+  const imageStyle = buildImageStyle(size, rotated);
 
   return (
     <Pressable
       onPress={onClick ? handlePress : undefined}
-      style={containerStyle as StyleProp<ViewStyle>}
+      style={containerStyle}
       // Accessibilty props
       accessibilityRole="button"
       accessibilityLabel={onClick ? "Mahjong Tile" : undefined}
@@ -88,9 +111,9 @@ export const Hai: FC<HaiProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',            // Web環境で flexbox を有効にする
-    backgroundColor: '#f8f6f0', // hai-bg
-    borderColor: '#c9c5b8',     // hai-border
+    display: 'flex',                       // Web環境で flexbox を有効にする
+    backgroundColor: HAI_COLORS.background, // hai-bg
+    borderColor: HAI_COLORS.border,         // hai-border
     borderWidth: 1,
     borderRadius: 4,            // rounded
     overflow: 'hidden',

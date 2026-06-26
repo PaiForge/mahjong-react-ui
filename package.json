@@ -1,6 +1,6 @@
 {
   "name": "@pai-forge/mahjong-react-ui",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "React UI components for Mahjong (Riichi)",
   "type": "module",
   "publishConfig": {

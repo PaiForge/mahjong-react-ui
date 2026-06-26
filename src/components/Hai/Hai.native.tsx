@@ -1,9 +1,53 @@
 import React from "react";
 import { Image, Pressable, View, StyleSheet } from "react-native";
 import type { StyleProp, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native";
-import type { HaiProps } from "../../types";
+import type { HaiProps, HaiSize } from "../../types";
 import { getTileImage } from "../../assets/tiles";
-import { getHaiSizePixels } from "../../utils";
+import { getHaiSizePixels, getOrientedHaiSizePixels } from "../../utils";
+import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
+
+/** 状態(回転・ハイライト・選択・薄表示)に応じたコンテナスタイルを組み立てる */
+const buildContainerStyle = (
+    size: HaiSize,
+    state: Pick<
+        HaiProps,
+        "rotated" | "highlighted" | "selected" | "dimmed" | "style"
+    >,
+): StyleProp<ViewStyle> => {
+    const {
+        rotated = false,
+        highlighted = false,
+        selected = false,
+        dimmed = false,
+        style,
+    } = state;
+    const { width, height } = getOrientedHaiSizePixels(size, rotated);
+
+    return [
+        styles.container,
+        { width, height },
+        highlighted && styles.highlighted,
+        selected && styles.selected,
+        dimmed && styles.dimmed,
+        style,
+    ];
+};
+
+/** 回転時は元の縦長サイズのまま90度回転させ、中央基準で位置を合わせる */
+const buildImageStyle = (size: HaiSize, rotated: boolean): StyleProp<ImageStyle> => {
+    const { width, height } = getHaiSizePixels(size);
+    return [
+        { width: "100%", height: "100%", backgroundColor: "#fff", borderRadius: 6 },
+        rotated && {
+            transform: [{ rotate: "90deg" }],
+            width: height,
+            height: width,
+            position: "absolute",
+            top: (width - height) / 2,
+            left: (height - width) / 2,
+        },
+    ];
+};
 
 /**
  * 牌コンポーネント (Native)
@@ -20,32 +64,16 @@ export const Hai: React.FC<HaiProps> = ({
     style,
 }) => {
     const tileImageSrc = getTileImage(hai);
-    const { width, height } = getHaiSizePixels(size);
 
-    const containerStyle: StyleProp<ViewStyle> = [
-        styles.container,
-        { width, height },
-        rotated && {
-            width: height,
-            height: width,
-        },
-        highlighted && styles.highlighted,
-        selected && styles.selected,
-        dimmed && styles.dimmed,
+    const containerStyle = buildContainerStyle(size, {
+        rotated,
+        highlighted,
+        selected,
+        dimmed,
         style,
-    ];
+    });
 
-    const imageStyle: StyleProp<ImageStyle> = [
-        { width: "100%", height: "100%", backgroundColor: '#fff', borderRadius: 6 },
-        rotated && {
-            transform: [{ rotate: "90deg" }],
-            width: height,
-            height: width,
-            position: "absolute",
-            top: (width - height) / 2,
-            left: (height - width) / 2,
-        },
-    ];
+    const imageStyle = buildImageStyle(size, rotated);
 
     const content = (
         <Image
@@ -73,18 +101,17 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         justifyContent: "center",
         alignItems: "center",
-        // simple shadow simulation
         borderWidth: 1,
-        borderColor: "red", // DEBUG: Changed to red to verify update
+        borderColor: HAI_COLORS.border, // hai-border（web 実装と統一）
     },
     highlighted: {
-        borderColor: "#fbbf24", // yellow-400
+        borderColor: HAI_COLORS.highlight, // yellow-400
         borderWidth: 2,
     },
     selected: {
-        borderColor: "#3b82f6", // blue-500
+        borderColor: HAI_COLORS.selected, // blue-500
         borderWidth: 2,
-        transform: [{ translateY: -4 }],
+        transform: [{ translateY: HAI_SELECTED_LIFT }],
     },
     dimmed: {
         opacity: 0.5,

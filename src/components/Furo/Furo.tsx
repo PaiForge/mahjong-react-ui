@@ -1,8 +1,10 @@
 import type { FC } from "react";
-import { MentsuType, Tacha, type HaiKindId } from "@pai-forge/riichi-mahjong";
+import type { HaiKindId } from "@pai-forge/riichi-mahjong";
 import type { FuroProps } from "../../types";
+import { cx } from "../../utils";
 import { Hai } from "../Hai";
 import { HaiBack } from "../HaiBack";
+import { getRotatedHaiIndex, isAnkan } from "./furoLayout";
 
 /**
  * 副露コンポーネント
@@ -16,35 +18,15 @@ export const Furo: FC<FuroProps> = ({
   size = "md",
   className = "",
 }) => {
-  const { type, hais } = mentsu;
+  const { hais } = mentsu;
 
-  // 鳴き元に応じて横向き牌の位置を決定
-  const getRotatedIndex = (): number => {
-    if (furo === undefined) return -1;
+  // 鳴き元に応じて横向きにする牌の位置を決定
+  const rotatedIndex = getRotatedHaiIndex(furo, hais.length);
 
-    switch (furo.from) {
-      case Tacha.Kamicha: // 上家（左）- 左端が横向き
-        return 0;
-      case Tacha.Toimen: // 対面 - 中央が横向き
-        return 1;
-      case Tacha.Shimocha: // 下家（右）- 右端が横向き
-        return hais.length - 1;
-      default:
-        return -1;
-    }
-  };
-
-  const rotatedIndex = getRotatedIndex();
-
-  // 暗槓の場合（副露されていないカンツのみ。加槓・大明槓は明槓なので含めない）
-  const isAnkan = type === MentsuType.Kantsu && furo === undefined;
-
-  const containerClasses = ["inline-flex", "items-end", "gap-px", className]
-    .filter(Boolean)
-    .join(" ");
+  const containerClasses = cx("inline-flex", "items-end", "gap-px", className);
 
   // 暗槓の表示（外側2枚が裏向き）
-  if (isAnkan) {
+  if (isAnkan(mentsu, furo)) {
     return (
       <div className={containerClasses}>
         <HaiBack size={size} />
