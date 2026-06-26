@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import type { HaiKindId, CompletedMentsu } from "@pai-forge/riichi-mahjong";
 import type { TehaiProps } from "../../types";
+import { cx } from "../../utils";
 import { Hai } from "../Hai";
 import { Furo } from "../Furo";
 
@@ -20,9 +21,7 @@ export const Tehai: FC<TehaiProps> = ({
 }) => {
   const { closed, exposed } = tehai;
 
-  const containerClasses = ["inline-flex", "items-end", "gap-2", className]
-    .filter(Boolean)
-    .join(" ");
+  const containerClasses = cx("inline-flex", "items-end", "gap-2", className);
 
   const closedHandClasses = "inline-flex items-end gap-px";
   const tsumoClasses = "inline-flex items-end ml-2";

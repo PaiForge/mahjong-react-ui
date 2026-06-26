@@ -5,3 +5,4 @@ export {
   getHaiSizeClasses,
   getHaiSizePixels,
 } from "./haiUtils";
+export { cx } from "./classNames";

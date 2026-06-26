@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import type { HaiBackProps, HaiBackColor } from "../../types";
-import { getHaiSizeClasses, getHaiSizePixels } from "../../utils";
+import { cx, getHaiSizeClasses, getHaiSizePixels } from "../../utils";
 import { BackImage } from "../../assets/tiles";
 
 /**
@@ -33,7 +33,7 @@ export const HaiBack: FC<HaiBackProps> = ({
   const { width, height } = getHaiSizeClasses(size, rotated);
   const pixels = getHaiSizePixels(size);
 
-  const containerClasses = [
+  const containerClasses = cx(
     "inline-block",
     "relative",
     "overflow-hidden",
@@ -43,9 +43,7 @@ export const HaiBack: FC<HaiBackProps> = ({
     width,
     height,
     className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  );
 
   const colorFilterClasses = getColorFilterClasses(color);
 
