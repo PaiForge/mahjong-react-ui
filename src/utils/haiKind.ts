@@ -62,3 +62,39 @@ export function getJihaiName(kind: HaiKindId): string | undefined {
       return undefined;
   }
 }
+
+/** 数牌の数字の漢数字表記（1〜9） */
+const KANSUUJI = [
+  "一",
+  "二",
+  "三",
+  "四",
+  "五",
+  "六",
+  "七",
+  "八",
+  "九",
+] as const;
+
+/** 数牌の牌種ごとの接尾辞 */
+const SUUHAI_SUFFIX: Partial<Record<HaiType, string>> = {
+  [HaiType.Manzu]: "萬",
+  [HaiType.Pinzu]: "筒",
+  [HaiType.Souzu]: "索",
+};
+
+/**
+ * 牌の名前を取得する（例: 一萬・五筒・九索・東・白）
+ *
+ * `Hai` の `alt` の既定値。画像だけの牌に、スクリーンリーダーと検索エンジンが
+ * 読める名前を与える。
+ */
+export function getHaiName(kind: HaiKindId): string {
+  const jihai = getJihaiName(kind);
+  if (jihai !== undefined) return jihai;
+  const number = haiKindToNumber(kind);
+  const kanji = number === undefined ? undefined : KANSUUJI[number - 1];
+  const suffix = SUUHAI_SUFFIX[kindIdToHaiType(kind)];
+  if (kanji === undefined || suffix === undefined) return String(kind);
+  return `${kanji}${suffix}`;
+}

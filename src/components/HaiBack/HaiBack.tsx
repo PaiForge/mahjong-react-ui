@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { HaiBackProps } from "../../types";
 import { cx, getHaiSizeClasses } from "../../utils";
-import { BackImage } from "../../assets/tiles";
+import { toTileImageUri, useTileImage } from "../TileImageProvider";
 import { getColorFilterClasses, getRotatedImageStyle } from "./haiBackStyle";
 
 /**
@@ -17,6 +17,7 @@ export const HaiBack: FC<HaiBackProps> = ({
   className = "",
 }) => {
   const { width, height } = getHaiSizeClasses(size, rotated);
+  const backImageSrc = toTileImageUri(useTileImage("back"));
 
   const containerClasses = cx(
     "inline-block",
@@ -44,7 +45,7 @@ export const HaiBack: FC<HaiBackProps> = ({
   return (
     <div className={containerClasses}>
       <img
-        src={BackImage}
+        src={backImageSrc}
         alt=""
         className={imageClasses}
         style={imageStyle}

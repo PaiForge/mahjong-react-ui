@@ -2,8 +2,8 @@ import React from "react";
 import { Image, Pressable, View, StyleSheet } from "react-native";
 import type { StyleProp, ViewStyle, ImageStyle, ImageSourcePropType } from "react-native";
 import type { HaiProps, HaiSize } from "../../types";
-import { getTileImage } from "../../assets/tiles";
-import { getHaiSizePixels, getOrientedHaiSizePixels } from "../../utils";
+import { getHaiName, getHaiSizePixels, getOrientedHaiSizePixels } from "../../utils";
+import { useTileImage } from "../TileImageProvider";
 import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
 
 /** 状態(回転・ハイライト・選択・薄表示)に応じたコンテナスタイルを組み立てる */
@@ -55,6 +55,7 @@ const buildImageStyle = (size: HaiSize, rotated: boolean): StyleProp<ImageStyle>
 export const Hai: React.FC<HaiProps> = ({
     hai,
     size = "md",
+    alt,
     rotated = false,
     highlighted = false,
     dimmed = false,
@@ -63,7 +64,8 @@ export const Hai: React.FC<HaiProps> = ({
     // className は Native では無視する
     style,
 }) => {
-    const tileImageSrc = getTileImage(hai);
+    const tileImageSrc = useTileImage(hai);
+    const tileImageSource = typeof tileImageSrc === "string" ? { uri: tileImageSrc } : tileImageSrc;
 
     const containerStyle = buildContainerStyle(size, {
         rotated,
@@ -77,7 +79,8 @@ export const Hai: React.FC<HaiProps> = ({
 
     const content = (
         <Image
-            source={tileImageSrc as ImageSourcePropType}
+            source={tileImageSource as ImageSourcePropType}
+            alt={alt ?? getHaiName(hai)}
             style={imageStyle}
             resizeMode="contain"
         />
