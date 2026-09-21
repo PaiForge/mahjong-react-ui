@@ -17,6 +17,11 @@ export type HaiSize = "xs" | "sm" | "md" | "lg" | "xl";
 export interface HaiProps {
   readonly hai: HaiKindId;
   readonly size?: HaiSize;
+  /**
+   * 画像の代替テキスト。省略時は牌の名前（`getHaiName`、例: 一萬・東）。
+   * 装飾として並べるだけで読み上げ不要なら `""` を渡す
+   */
+  readonly alt?: string;
   readonly rotated?: boolean;
   readonly highlighted?: boolean;
   readonly dimmed?: boolean;

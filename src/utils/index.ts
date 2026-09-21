@@ -1,4 +1,9 @@
-export { kindIdToHaiType, haiKindToNumber, getJihaiName } from "./haiKind";
+export {
+  kindIdToHaiType,
+  haiKindToNumber,
+  getJihaiName,
+  getHaiName,
+} from "./haiKind";
 export {
   getHaiSizeClasses,
   getHaiSizePixels,

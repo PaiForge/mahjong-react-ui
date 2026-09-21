@@ -28,6 +28,11 @@ describe("Hai", () => {
     expect(img).toBeInTheDocument();
   });
 
+  it("押せない牌は button を名乗らない", () => {
+    render(<Hai hai={HaiKind.ManZu1} />);
+    expect(screen.queryByRole("button")).not.toBeInTheDocument();
+  });
+
   it("should handle click events", () => {
     const handleClick = vi.fn();
     render(<Hai hai={HaiKind.ManZu1} onClick={handleClick} />);

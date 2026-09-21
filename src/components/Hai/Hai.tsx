@@ -1,9 +1,20 @@
 import type { FC } from "react";
 import type { HaiProps, HaiSize } from "../../types";
-import { getHaiSizePixels, getOrientedHaiSizePixels } from "../../utils";
+import {
+  getHaiName,
+  getHaiSizePixels,
+  getOrientedHaiSizePixels,
+} from "../../utils";
 import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
-import { getTileImage } from "../../assets/tiles";
-import { Image, Pressable, StyleSheet, type ImageSourcePropType, type StyleProp, type ViewStyle } from "react-native";
+import { useTileImage } from "../TileImageProvider";
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  type ImageSourcePropType,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
 /** 状態(回転・ハイライト・選択・薄表示)に応じたコンテナスタイルを組み立てる */
 const buildContainerStyle = (
@@ -30,7 +41,7 @@ const buildContainerStyle = (
       opacity: dimmed ? 0.5 : 1,
       // 回転時はレイアウトボックスのはみ出しを許容
       // （視覚的な絵柄はコンテナ内に収まるが、レイアウトボックスは縦長のままのため）
-      overflow: rotated ? 'visible' : 'hidden',
+      overflow: rotated ? "visible" : "hidden",
     },
     // Highlighted (Yellow ring)
     highlighted && {
@@ -55,7 +66,7 @@ const buildImageStyle = (size: HaiSize, rotated: boolean) => {
     rotated && {
       width: pixels.width - 6,
       height: pixels.height - 6,
-      transform: [{ rotate: '90deg' }],
+      transform: [{ rotate: "90deg" }],
     },
   ];
 };
@@ -65,10 +76,14 @@ const buildImageStyle = (size: HaiSize, rotated: boolean) => {
  *
  * FluffyStuff/riichi-mahjong-tiles のPNG画像を使用して
  * 高品質な麻雀牌を描画します。
+ *
+ * 画像の参照先は `TileImageProvider` で差し替えられる（既定は同梱の data URI）。
+ * `alt` は省略時に牌の名前になる。
  */
 export const Hai: FC<HaiProps> = ({
   hai,
   size = "md",
+  alt,
   rotated = false,
   highlighted = false,
   dimmed = false,
@@ -76,7 +91,7 @@ export const Hai: FC<HaiProps> = ({
   onClick,
   style,
 }) => {
-  const tileImageSrc = getTileImage(hai);
+  const tileImageSrc = useTileImage(hai);
 
   const handlePress = () => {
     onClick?.(hai);
@@ -96,12 +111,14 @@ export const Hai: FC<HaiProps> = ({
     <Pressable
       onPress={onClick ? handlePress : undefined}
       style={containerStyle}
-      // Accessibilty props
-      accessibilityRole="button"
-      accessibilityLabel={onClick ? "Mahjong Tile" : undefined}
+      // 押せる牌だけをボタンとして名乗る（押せない牌まで button にすると
+      // 支援技術に「押せる要素」が並んで見える）
+      accessibilityRole={onClick ? "button" : undefined}
+      accessibilityLabel={onClick ? (alt ?? getHaiName(hai)) : undefined}
     >
       <Image
         source={tileImageSrc as ImageSourcePropType}
+        alt={alt ?? getHaiName(hai)}
         style={imageStyle}
         resizeMode="contain"
       />
@@ -111,24 +128,24 @@ export const Hai: FC<HaiProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',                       // Web環境で flexbox を有効にする
+    display: "flex", // Web環境で flexbox を有効にする
     backgroundColor: HAI_COLORS.background, // hai-bg
-    borderColor: HAI_COLORS.border,         // hai-border
+    borderColor: HAI_COLORS.border, // hai-border
     borderWidth: 1,
-    borderRadius: 4,            // rounded
-    overflow: 'hidden',
-    padding: 2,                 // p-0.5
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderRadius: 4, // rounded
+    overflow: "hidden",
+    padding: 2, // p-0.5
+    justifyContent: "center",
+    alignItems: "center",
     // Shadow (shadow-hai)
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
     shadowRadius: 2,
     elevation: 2,
   },
   image: {
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
 });
