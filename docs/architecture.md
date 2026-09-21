@@ -16,7 +16,9 @@ src/
       [Component].test.tsx    # ユニットテスト
   types/            # 共有の型定義
   utils/            # 共有ユーティリティ関数
+  assets/tiles/     # 牌画像（PNG）と、牌の種類 → 画像の対応表
   index.ts          # 全てのコンポーネントと型をエクスポートするメインエントリポイント
+assets/tiles/       # ビルドで src/assets/tiles の PNG を写した配布用（git 管理外）
 ```
 
 ## 設計原則
@@ -36,6 +38,15 @@ src/
 
 ### 4. ロジックの分離
 複雑なドメインロジック（シャンテン計算、役判定など）は `riichi-mahjong` ライブラリに委譲します。このUIパッケージは、**レンダリング** と **ユーザーインタラクション** にのみ焦点を当てます。
+
+### 5. 牌画像の参照先
+`Hai` / `HaiBack` は画像の参照先を `useTileImage` で引き、既定はビルド時に
+base64 化された同梱画像（Vite のライブラリモードは画像を data URI に埋め込む）です。
+data URI は利用側の HTML / JS に画像本体ごと入り、キャッシュにも乗らないため、
+牌を多く並べるアプリ向けに `TileImageProvider` で参照先を差し替えられます。
+同じ画像を `assets/tiles/` に PNG として同梱し、`TILE_IMAGE_FILE_NAMES` で
+牌の種類とファイル名を対応付けています。画像の取得方法（静的ファイル・CDN・
+縮小版）はライブラリが決めず、利用側の `resolve` に委ねます。
 
 ## 依存関係
 - `riichi-mahjong`: コアロジックライブラリ（現在はローカル依存）。
