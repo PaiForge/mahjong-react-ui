@@ -11,6 +11,10 @@ import { getRotatedHaiIndex, isAnkan } from "./furoLayout";
  *
  * チー・ポン・カンなどの鳴いた面子を表示します。
  * 鳴き元の方向によって横向きの牌の位置が変わります。
+ *
+ * web 専用（`<div>` と Tailwind のクラスで並べる）。React Native では
+ * 同じ規則（鳴き元の位置の牌を横向きに、暗槓は両端を伏せる）で利用側が
+ * `Hai` を並べること。
  */
 export const Furo: FC<FuroProps> = ({
   mentsu,

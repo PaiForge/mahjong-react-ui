@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, ReactNode } from "react";
 import type { HaiProps, HaiSize } from "../../types";
 import {
   getHaiName,
@@ -6,12 +6,12 @@ import {
   getOrientedHaiSizePixels,
 } from "../../utils";
 import { HAI_COLORS, HAI_SELECTED_LIFT } from "../../theme/colors";
-import { useTileImage } from "../TileImageProvider";
+import { toTileImageSource, useTileImage } from "../TileImageProvider";
 import {
   Image,
   Pressable,
   StyleSheet,
-  type ImageSourcePropType,
+  View,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
@@ -79,6 +79,10 @@ const buildImageStyle = (size: HaiSize, rotated: boolean) => {
  *
  * 画像の参照先は `TileImageProvider` で差し替えられる（既定は同梱の data URI）。
  * `alt` は省略時に牌の名前になる。
+ *
+ * 押せる牌（`onClick` あり）だけを `Pressable` で包む。押せない牌まで `Pressable` に
+ * すると、React Native ではタッチを最も内側の `Pressable` が受け取るため、
+ * ボタンの中に置いた牌が親のタップを奪う。
  */
 export const Hai: FC<HaiProps> = ({
   hai,
@@ -91,11 +95,8 @@ export const Hai: FC<HaiProps> = ({
   onClick,
   style,
 }) => {
-  const tileImageSrc = useTileImage(hai);
-
-  const handlePress = () => {
-    onClick?.(hai);
-  };
+  // React Native の Image は文字列の source を描かないので { uri } に揃える
+  const tileImageSource = toTileImageSource(useTileImage(hai));
 
   const containerStyle = buildContainerStyle(size, {
     rotated,
@@ -107,21 +108,29 @@ export const Hai: FC<HaiProps> = ({
 
   const imageStyle = buildImageStyle(size, rotated);
 
+  const image: ReactNode = (
+    <Image
+      source={tileImageSource}
+      alt={alt ?? getHaiName(hai)}
+      style={imageStyle}
+      resizeMode="contain"
+    />
+  );
+
+  if (onClick === undefined) {
+    return <View style={containerStyle}>{image}</View>;
+  }
+
   return (
     <Pressable
-      onPress={onClick ? handlePress : undefined}
+      onPress={() => {
+        onClick(hai);
+      }}
       style={containerStyle}
-      // 押せる牌だけをボタンとして名乗る（押せない牌まで button にすると
-      // 支援技術に「押せる要素」が並んで見える）
-      accessibilityRole={onClick ? "button" : undefined}
-      accessibilityLabel={onClick ? (alt ?? getHaiName(hai)) : undefined}
+      accessibilityRole="button"
+      accessibilityLabel={alt ?? getHaiName(hai)}
     >
-      <Image
-        source={tileImageSrc as ImageSourcePropType}
-        alt={alt ?? getHaiName(hai)}
-        style={imageStyle}
-        resizeMode="contain"
-      />
+      {image}
     </Pressable>
   );
 };

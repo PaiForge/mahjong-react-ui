@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { HaiKind, MentsuType, FuroType, Tacha } from "@pai-forge/riichi-mahjong";
+import {
+  HaiKind,
+  MentsuType,
+  FuroType,
+  Tacha,
+} from "@pai-forge/riichi-mahjong";
 import { Tehai } from "./Tehai";
 
 describe("Tehai", () => {
@@ -60,7 +65,11 @@ describe("Tehai", () => {
             {
               type: MentsuType.Koutsu,
               hais: [HaiKind.Chun, HaiKind.Chun, HaiKind.Chun],
-              furo: { type: FuroType.Pon, from: Tacha.Kamicha },
+              furo: {
+                type: FuroType.Pon,
+                from: Tacha.Kamicha,
+                nakiHai: HaiKind.Chun,
+              },
             },
           ],
         }}

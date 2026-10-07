@@ -9,6 +9,9 @@ import { getColorFilterClasses, getRotatedImageStyle } from "./haiBackStyle";
  *
  * FluffyStuff/riichi-mahjong-tiles のPNG画像を使用して
  * 麻雀の牌の裏面を描画します。
+ *
+ * web 専用（`<img>` と Tailwind のクラスで描く）。React Native では
+ * `useTileImage("back")` と `toTileImageSource` で利用側が描くこと。
  */
 export const HaiBack: FC<HaiBackProps> = ({
   size = "md",

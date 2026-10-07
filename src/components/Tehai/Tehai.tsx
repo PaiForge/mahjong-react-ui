@@ -10,6 +10,9 @@ import { Furo } from "../Furo";
  *
  * 純手牌（閉じた牌）と副露（開いた面子）を表示します。
  * ツモ牌がある場合は少し離して表示します。
+ *
+ * web 専用（`<div>` と Tailwind のクラスで並べる）。React Native では
+ * `Hai` を利用側が並べること。
  */
 export const Tehai: FC<TehaiProps> = ({
   tehai,
@@ -59,7 +62,11 @@ export const Tehai: FC<TehaiProps> = ({
       {/* ツモ牌（分離表示） */}
       {tsumo !== undefined && (
         <div className={tsumoClasses}>
-          <Hai hai={tsumo} size={size} {...haiClickProps(tsumo, closed.length)} />
+          <Hai
+            hai={tsumo}
+            size={size}
+            {...haiClickProps(tsumo, closed.length)}
+          />
         </div>
       )}
 

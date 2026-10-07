@@ -37,7 +37,7 @@ export interface HaiProps {
 export type HaiBackColor = "red" | "blue" | "yellow";
 
 /**
- * 牌の裏面コンポーネントのProps
+ * 牌の裏面コンポーネントのProps（`HaiBack` は web 専用）
  */
 export interface HaiBackProps {
   readonly size?: HaiSize;
@@ -47,7 +47,7 @@ export interface HaiBackProps {
 }
 
 /**
- * 手牌コンポーネントのProps
+ * 手牌コンポーネントのProps（`Tehai` は web 専用）
  */
 export interface TehaiProps {
   readonly tehai: TehaiType;
@@ -59,7 +59,7 @@ export interface TehaiProps {
 }
 
 /**
- * 副露コンポーネントのProps
+ * 副露コンポーネントのProps（`Furo` は web 専用）
  */
 export interface FuroProps {
   readonly mentsu: CompletedMentsu;
