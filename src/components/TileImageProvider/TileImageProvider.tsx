@@ -69,6 +69,19 @@ export function toTileImageUri(source: TileImageSource): string {
   return typeof source === "string" ? source : source.uri;
 }
 
+/**
+ * `TileImageSource` を React Native の `Image` の `source` に渡せる `{ uri }` にする
+ *
+ * React Native の `Image` は文字列の `source` を同梱画像の ID とみなして探し、
+ * 見つからなければ何も描かない（web の `<img>` や react-native-web は文字列も
+ * 受け付けるため、web では表に出ない）。`Image` に渡す直前は必ずこれを通すこと。
+ */
+export function toTileImageSource(source: TileImageSource): {
+  readonly uri: string;
+} {
+  return typeof source === "string" ? { uri: source } : source;
+}
+
 export interface CreateTileImageResolverOptions {
   /** 画像を置いた場所（例: `"/tiles"`、`"https://cdn.example.com/tiles"`）。末尾の `/` は不要 */
   readonly baseUrl: string;

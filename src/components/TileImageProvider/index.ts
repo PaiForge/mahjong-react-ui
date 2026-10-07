@@ -2,6 +2,7 @@ export {
   TileImageProvider,
   useTileImage,
   toTileImageUri,
+  toTileImageSource,
   createTileImageResolver,
 } from "./TileImageProvider";
 export type {
