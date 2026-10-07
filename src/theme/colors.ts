@@ -1,8 +1,8 @@
 /**
  * 牌コンポーネントで共有する色定数
  *
- * Web版(Hai.tsx)とNative版(Hai.native.tsx)で同じ値を使うため一元化する。
- * Tailwindのカラーパレットと対応させ、両実装間の不整合を防ぐ。
+ * react-native の StyleSheet で描く Hai と、Tailwind クラスで描く HaiBack 等が
+ * 同じ値を使うため一元化する。Tailwind のカラーパレットと対応させ、不整合を防ぐ。
  */
 export const HAI_COLORS = {
   /** 牌の背景色 (hai-bg) */
