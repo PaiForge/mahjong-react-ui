@@ -30,7 +30,8 @@ npm install @pai-forge/mahjong-react-ui
 コンポーネントの使用例やバリエーションを確認するには、Storybookを参照するのが最も簡単です。
 
 ```bash
-npm run dev
+pnpm install
+pnpm dev
 # Storybookが起動し、すべてのコンポーネントを確認できます
 ```
 
