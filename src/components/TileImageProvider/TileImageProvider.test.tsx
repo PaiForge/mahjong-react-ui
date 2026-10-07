@@ -7,6 +7,7 @@ import { HaiBack } from "../HaiBack";
 import {
   createTileImageResolver,
   TileImageProvider,
+  toTileImageSource,
   toTileImageUri,
 } from "./TileImageProvider";
 
@@ -42,6 +43,14 @@ describe("toTileImageUri", () => {
   it("文字列はそのまま、{ uri } は中身を返す", () => {
     expect(toTileImageUri("/a.png")).toBe("/a.png");
     expect(toTileImageUri({ uri: "/b.png" })).toBe("/b.png");
+  });
+});
+
+describe("toTileImageSource", () => {
+  it("文字列は { uri } に包み、{ uri } はそのまま返す", () => {
+    expect(toTileImageSource("/a.png")).toEqual({ uri: "/a.png" });
+    const source = { uri: "/b.png" };
+    expect(toTileImageSource(source)).toBe(source);
   });
 });
 

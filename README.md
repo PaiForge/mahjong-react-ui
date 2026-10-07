@@ -10,12 +10,28 @@
 npm install @pai-forge/mahjong-react-ui
 ```
 
+## 対応プラットフォーム
+
+| 公開 API | Web（DOM） | React Native |
+| --- | --- | --- |
+| `Hai`、`TileImageProvider` と関連関数、ユーティリティ | ○ | ○ |
+| `HaiBack`、`Furo`、`Tehai` | ○ | ×（web 専用） |
+
+`Hai` は react-native の `Image` / `Pressable` / `View` で描くので、React Native
+（Expo を含む）でそのまま使えます。Web では react-native-web、またはそれらを
+`<img>` / `<div>` に写す利用側の shim で描きます。
+
+`HaiBack` / `Furo` / `Tehai` は `<img>` / `<div>` と Tailwind のクラスで描く web 専用の
+コンポーネントで、React Native では描けません。ネイティブで副露や裏面を並べる場合は、
+`Hai` と `useTileImage("back")` / `toTileImageSource` を使って利用側で組み立ててください。
+
 ## 使い方
 
 コンポーネントの使用例やバリエーションを確認するには、Storybookを参照するのが最も簡単です。
 
 ```bash
-npm run dev
+pnpm install
+pnpm dev
 # Storybookが起動し、すべてのコンポーネントを確認できます
 ```
 
@@ -66,6 +82,11 @@ function App() {
 ファイル名は `TILE_IMAGE_FILE_NAMES` が持ちます（裏面は `"back"`）。`resolve` は
 牌の種類を受け取って参照先を返す関数なので、CDN やサイズ別の出し分けも自由です。
 `Hai` の `alt` は省略時に牌の名前（`getHaiName`、例: 一萬・東）になります。
+
+`resolve` の戻り値（`TileImageSource`）は文字列か `{ uri }` です。自分で描くときは、
+web の `<img src>` には `toTileImageUri`、React Native の `Image` の `source` には
+`toTileImageSource` を通してください。React Native の `Image` は文字列の `source` を
+同梱画像の ID とみなして何も描かないためです。
 
 ## ドキュメント
 

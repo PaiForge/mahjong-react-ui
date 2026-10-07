@@ -32,7 +32,11 @@ assets/tiles/       # ビルドで src/assets/tiles の PNG を写した配布�
 - **読み取り専用**: 不変性を保証するために、`readonly` プロパティを推奨します。
 
 ### 3. スタイリング
-- **Tailwind CSS**: スタイリングにはTailwind CSSを使用します。
+- **`Hai` は react-native の部品で描く**: `Image` / `Pressable` / `View` と `StyleSheet` で
+  描き、React Native と Web（react-native-web、または利用側の shim）の両方で動かします。
+  テストは `react-native` を react-native-web に向けて jsdom で走らせています。
+- **`HaiBack` / `Furo` / `Tehai` は web 専用**: `<img>` / `<div>` と Tailwind のクラスで描きます。
+- **Tailwind CSS**: web 専用のコンポーネントのスタイリングにはTailwind CSSを使用します。
 - **スコープされたスタイル**: 利用側のアプリケーションに影響を与えないよう、グローバルスタイルの使用は避けます。
 - **テーマ設定**: 必要に応じて、CSS変数やTailwindの設定を通じて、ダークモードやカスタムテーマのサポートを目指します。
 
@@ -42,6 +46,9 @@ assets/tiles/       # ビルドで src/assets/tiles の PNG を写した配布�
 ### 5. 牌画像の参照先
 `Hai` / `HaiBack` は画像の参照先を `useTileImage` で引き、既定はビルド時に
 base64 化された同梱画像（Vite のライブラリモードは画像を data URI に埋め込む）です。
+参照先（`TileImageSource`）は文字列か `{ uri }` で、`<img src>` に渡すときは
+`toTileImageUri`、React Native の `Image` に渡すときは `toTileImageSource` で形を揃えます
+（React Native の `Image` は文字列の `source` を同梱画像の ID とみなし、何も描きません）。
 data URI は利用側の HTML / JS に画像本体ごと入り、キャッシュにも乗らないため、
 牌を多く並べるアプリ向けに `TileImageProvider` で参照先を差し替えられます。
 同じ画像を `assets/tiles/` に PNG として同梱し、`TILE_IMAGE_FILE_NAMES` で

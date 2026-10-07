@@ -6,6 +6,7 @@ export {
   TileImageProvider,
   useTileImage,
   toTileImageUri,
+  toTileImageSource,
   createTileImageResolver,
 } from "./components";
 export type {
