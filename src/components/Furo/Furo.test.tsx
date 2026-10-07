@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
-import { HaiKind, MentsuType, FuroType, Tacha } from "@pai-forge/riichi-mahjong";
+import {
+  HaiKind,
+  MentsuType,
+  FuroType,
+  Tacha,
+} from "@pai-forge/riichi-mahjong";
 import { Furo } from "./Furo";
 import { BackImage } from "../../assets/tiles";
 
@@ -18,7 +23,11 @@ describe("Furo", () => {
           type: MentsuType.Shuntsu,
           hais: [HaiKind.ManZu1, HaiKind.ManZu2, HaiKind.ManZu3],
         }}
-        furo={{ type: FuroType.Chi, from: Tacha.Kamicha }}
+        furo={{
+          type: FuroType.Chi,
+          from: Tacha.Kamicha,
+          nakiHai: HaiKind.ManZu1,
+        }}
       />,
     );
     const imgs = container.querySelectorAll("img");
@@ -32,7 +41,7 @@ describe("Furo", () => {
           type: MentsuType.Koutsu,
           hais: [HaiKind.Chun, HaiKind.Chun, HaiKind.Chun],
         }}
-        furo={{ type: FuroType.Pon, from: Tacha.Toimen }}
+        furo={{ type: FuroType.Pon, from: Tacha.Toimen, nakiHai: HaiKind.Chun }}
       />,
     );
     const imgs = container.querySelectorAll("img");
@@ -46,7 +55,11 @@ describe("Furo", () => {
           type: MentsuType.Kantsu,
           hais: [HaiKind.Haku, HaiKind.Haku, HaiKind.Haku, HaiKind.Haku],
         }}
-        furo={{ type: FuroType.Daiminkan, from: Tacha.Shimocha }}
+        furo={{
+          type: FuroType.Daiminkan,
+          from: Tacha.Shimocha,
+          nakiHai: HaiKind.Haku,
+        }}
       />,
     );
     expect(container.querySelectorAll("img").length).toBe(4);
@@ -61,7 +74,12 @@ describe("Furo", () => {
           type: MentsuType.Kantsu,
           hais: [HaiKind.Hatsu, HaiKind.Hatsu, HaiKind.Hatsu, HaiKind.Hatsu],
         }}
-        furo={{ type: FuroType.Kakan, from: Tacha.Toimen }}
+        furo={{
+          type: FuroType.Kakan,
+          from: Tacha.Toimen,
+          nakiHai: HaiKind.Hatsu,
+          kakanHai: HaiKind.Hatsu,
+        }}
       />,
     );
     expect(container.querySelectorAll("img").length).toBe(4);

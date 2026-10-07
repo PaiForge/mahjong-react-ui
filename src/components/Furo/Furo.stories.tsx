@@ -23,7 +23,7 @@ export const ChiFromKamicha: Story = {
             type: MentsuType.Shuntsu,
             hais: [HaiKind.ManZu1, HaiKind.ManZu2, HaiKind.ManZu3],
         },
-        furo: { type: FuroType.Chi, from: Tacha.Kamicha },
+        furo: { type: FuroType.Chi, from: Tacha.Kamicha, nakiHai: HaiKind.ManZu1 },
         size: "md",
     },
 };
@@ -34,7 +34,7 @@ export const PonFromToimen: Story = {
             type: MentsuType.Koutsu,
             hais: [HaiKind.Chun, HaiKind.Chun, HaiKind.Chun],
         },
-        furo: { type: FuroType.Pon, from: Tacha.Toimen },
+        furo: { type: FuroType.Pon, from: Tacha.Toimen, nakiHai: HaiKind.Chun },
         size: "md",
     },
 };
@@ -45,7 +45,7 @@ export const PonFromShimocha: Story = {
             type: MentsuType.Koutsu,
             hais: [HaiKind.Haku, HaiKind.Haku, HaiKind.Haku],
         },
-        furo: { type: FuroType.Pon, from: Tacha.Shimocha },
+        furo: { type: FuroType.Pon, from: Tacha.Shimocha, nakiHai: HaiKind.Haku },
         size: "md",
     },
 };
@@ -56,7 +56,7 @@ export const DaiminkanFromKamicha: Story = {
             type: MentsuType.Kantsu,
             hais: [HaiKind.Hatsu, HaiKind.Hatsu, HaiKind.Hatsu, HaiKind.Hatsu],
         },
-        furo: { type: FuroType.Daiminkan, from: Tacha.Kamicha },
+        furo: { type: FuroType.Daiminkan, from: Tacha.Kamicha, nakiHai: HaiKind.Hatsu },
         size: "md",
     },
 };
@@ -81,7 +81,7 @@ export const AllFuroTypes: Story = {
                         type: MentsuType.Shuntsu,
                         hais: [HaiKind.PinZu1, HaiKind.PinZu2, HaiKind.PinZu3],
                     }}
-                    furo={{ type: FuroType.Chi, from: Tacha.Kamicha }}
+                    furo={{ type: FuroType.Chi, from: Tacha.Kamicha, nakiHai: HaiKind.PinZu1 }}
                     size="md"
                 />
             </div>
@@ -92,7 +92,7 @@ export const AllFuroTypes: Story = {
                         type: MentsuType.Koutsu,
                         hais: [HaiKind.SouZu5, HaiKind.SouZu5, HaiKind.SouZu5],
                     }}
-                    furo={{ type: FuroType.Pon, from: Tacha.Toimen }}
+                    furo={{ type: FuroType.Pon, from: Tacha.Toimen, nakiHai: HaiKind.SouZu5 }}
                     size="md"
                 />
             </div>
@@ -103,7 +103,7 @@ export const AllFuroTypes: Story = {
                         type: MentsuType.Koutsu,
                         hais: [HaiKind.ManZu9, HaiKind.ManZu9, HaiKind.ManZu9],
                     }}
-                    furo={{ type: FuroType.Pon, from: Tacha.Shimocha }}
+                    furo={{ type: FuroType.Pon, from: Tacha.Shimocha, nakiHai: HaiKind.ManZu9 }}
                     size="md"
                 />
             </div>
@@ -114,7 +114,7 @@ export const AllFuroTypes: Story = {
                         type: MentsuType.Kantsu,
                         hais: [HaiKind.Nan, HaiKind.Nan, HaiKind.Nan, HaiKind.Nan],
                     }}
-                    furo={{ type: FuroType.Daiminkan, from: Tacha.Kamicha }}
+                    furo={{ type: FuroType.Daiminkan, from: Tacha.Kamicha, nakiHai: HaiKind.Nan }}
                     size="md"
                 />
             </div>
@@ -143,7 +143,7 @@ export const Sizes: Story = {
                             type: MentsuType.Koutsu,
                             hais: [HaiKind.Chun, HaiKind.Chun, HaiKind.Chun],
                         }}
-                        furo={{ type: FuroType.Pon, from: Tacha.Kamicha }}
+                        furo={{ type: FuroType.Pon, from: Tacha.Kamicha, nakiHai: HaiKind.Chun }}
                         size={size}
                     />
                 </div>

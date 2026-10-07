@@ -11,17 +11,29 @@ import { getRotatedHaiIndex, isAnkan, NO_ROTATED_INDEX } from "./furoLayout";
 
 describe("getRotatedHaiIndex", () => {
   it("上家（左）からの鳴きは左端(0)を横向きにする", () => {
-    const furo: Furo = { type: FuroType.Chi, from: Tacha.Kamicha };
+    const furo: Furo = {
+      type: FuroType.Chi,
+      from: Tacha.Kamicha,
+      nakiHai: HaiKind.ManZu1,
+    };
     expect(getRotatedHaiIndex(furo, 3)).toBe(0);
   });
 
   it("対面からの鳴きは中央(1)を横向きにする", () => {
-    const furo: Furo = { type: FuroType.Pon, from: Tacha.Toimen };
+    const furo: Furo = {
+      type: FuroType.Pon,
+      from: Tacha.Toimen,
+      nakiHai: HaiKind.Chun,
+    };
     expect(getRotatedHaiIndex(furo, 3)).toBe(1);
   });
 
   it("下家（右）からの鳴きは右端(末尾)を横向きにする", () => {
-    const furo: Furo = { type: FuroType.Daiminkan, from: Tacha.Shimocha };
+    const furo: Furo = {
+      type: FuroType.Daiminkan,
+      from: Tacha.Shimocha,
+      nakiHai: HaiKind.Haku,
+    };
     expect(getRotatedHaiIndex(furo, 4)).toBe(3);
   });
 
@@ -41,12 +53,21 @@ describe("isAnkan", () => {
   });
 
   it("加槓は明槓なので暗槓ではない", () => {
-    const furo: Furo = { type: FuroType.Kakan, from: Tacha.Toimen };
+    const furo: Furo = {
+      type: FuroType.Kakan,
+      from: Tacha.Toimen,
+      nakiHai: HaiKind.Hatsu,
+      kakanHai: HaiKind.Hatsu,
+    };
     expect(isAnkan(kantsu, furo)).toBe(false);
   });
 
   it("大明槓は明槓なので暗槓ではない", () => {
-    const furo: Furo = { type: FuroType.Daiminkan, from: Tacha.Shimocha };
+    const furo: Furo = {
+      type: FuroType.Daiminkan,
+      from: Tacha.Shimocha,
+      nakiHai: HaiKind.Hatsu,
+    };
     expect(isAnkan(kantsu, furo)).toBe(false);
   });
 

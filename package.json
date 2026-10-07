@@ -42,7 +42,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@pai-forge/riichi-mahjong": "^0.4.1",
+    "@pai-forge/riichi-mahjong": "^1.0.0",
     "ajv": "^8.17.1"
   },
   "devDependencies": {
