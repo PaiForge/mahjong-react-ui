@@ -28,15 +28,22 @@ export default defineConfig({
     dts({
       insertTypesEntry: true,
       include: ["src"],
-      exclude: ["**/*.test.tsx", "**/*.stories.tsx"],
+      exclude: ["**/*.test.ts", "**/*.test.tsx", "**/*.stories.tsx", "src/test/**"],
     }),
   ],
   build: {
     lib: {
-      entry: resolve(__dirname, "src/index.ts"),
+      // 画像本体（base64 の data URI、2MB 超）は bundled-images にだけ入れる。
+      // index から画像のモジュールを参照しないことは scripts/assert-no-inline-images.mjs が
+      // ビルドの最後に検査する
+      entry: {
+        index: resolve(__dirname, "src/index.ts"),
+        "bundled-images": resolve(__dirname, "src/bundled-images.ts"),
+      },
       name: "MahjongReactUI",
       formats: ["es", "cjs"],
-      fileName: (format) => `index.${format === "es" ? "js" : "cjs"}`,
+      fileName: (format, entryName) =>
+        `${entryName}.${format === "es" ? "js" : "cjs"}`,
     },
     rollupOptions: {
       external: ["react", "react-dom", "react/jsx-runtime", "@pai-forge/riichi-mahjong", "react-native"],

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { render } from "@testing-library/react";
+import { renderWithTileImages } from "../../test/render-with-tile-images";
 import {
   HaiKind,
   MentsuType,
@@ -17,7 +17,7 @@ const countBackTiles = (container: HTMLElement): number =>
 
 describe("Furo", () => {
   it("should render a chi from kamicha", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Furo
         mentsu={{
           type: MentsuType.Shuntsu,
@@ -35,7 +35,7 @@ describe("Furo", () => {
   });
 
   it("should render a pon from toimen", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Furo
         mentsu={{
           type: MentsuType.Koutsu,
@@ -49,7 +49,7 @@ describe("Furo", () => {
   });
 
   it("should render a daiminkan from shimocha as an open meld (no back tiles)", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Furo
         mentsu={{
           type: MentsuType.Kantsu,
@@ -68,7 +68,7 @@ describe("Furo", () => {
 
   it("should render a kakan as an open meld (no back tiles)", () => {
     // 加槓は明槓（16符）。暗槓と誤って裏向きで描画してはならない（回帰テスト）
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Furo
         mentsu={{
           type: MentsuType.Kantsu,
@@ -87,7 +87,7 @@ describe("Furo", () => {
   });
 
   it("should render an ankan with two back tiles", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Furo
         mentsu={{
           type: MentsuType.Kantsu,

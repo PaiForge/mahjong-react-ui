@@ -1,3 +1,25 @@
+## 0.6.0 (2026-10-09)
+
+### Changed
+
+- **破壊的変更**: `Hai` / `HaiBack`（`useTileImage`）は `TileImageProvider` の配下でだけ
+  描けるようにした。Provider が無いと例外を投げる（0.5.0 までは同梱画像へ黙って
+  フォールバックしていた）。同梱画像を使いたいアプリは、新しいエントリ
+  `@pai-forge/mahjong-react-ui/bundled-images` の `resolveBundledTileImage` を
+  `TileImageProvider` に渡す
+- 画像本体（base64 の data URI、35 枚で 2MB 超）をメインのエントリから
+  `./bundled-images` へ分離した。`TileImageProvider` や `createTileImageResolver` を
+  import しただけでは画像がバンドルに入らない。静的ファイルに切り替えた web
+  アプリでは、牌を描かないページまで 2MB 超の JS を読んでいたのがこれで消える
+  （tree shaking では落ちない。`Hai` → `useTileImage` → 画像の参照が静的に繋がっていた）
+- `getBundledTileImage` の公開元をメインのエントリから `./bundled-images` へ移した
+- `TILE_IMAGE_FILE_NAMES` / `TileImageKind` を画像本体とは別のモジュール
+  （`src/assets/tiles/file-names.ts`）に置いた。公開 API は変わらない
+
+### Removed
+
+- 非推奨だった `getTileImage`（`getBundledTileImage` の旧名）を削除した
+
 ## 0.5.0 (2026-10-07)
 
 ### Fixed

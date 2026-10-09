@@ -1,9 +1,8 @@
 import { createContext, useContext, type FC, type ReactNode } from "react";
 import {
-  getBundledTileImage,
   TILE_IMAGE_FILE_NAMES,
   type TileImageKind,
-} from "../../assets/tiles";
+} from "../../assets/tiles/file-names";
 
 /**
  * 牌画像の参照先
@@ -26,17 +25,20 @@ export interface TileImageProviderProps {
 }
 
 /**
- * 牌画像の参照先を差し替える Provider
+ * 牌画像の参照先を決める Provider
  *
- * 既定では `Hai` / `HaiBack` はパッケージに同梱した画像（base64 の data URI）を
- * 描く。data URI は描画した HTML / JS に画像本体ごと埋め込まれるため、牌を多く
- * 並べるページでは転送量が大きくなり、ブラウザのキャッシュにも乗らない。
- * この Provider で囲むと、配下の牌はすべて `resolve` が返す参照先
- * （静的ファイルや CDN の URL）を描く。
+ * `Hai` / `HaiBack` を描くアプリは、ルートを必ずこれで囲む。配下の牌はすべて
+ * `resolve` が返す参照先を描く。
  *
- * パッケージは同じ画像を `assets/tiles/` に PNG ファイルとして同梱している。
- * 利用側はそれを自分の公開ディレクトリへ置き（必要なら縮小・WebP 化して）、
- * `createTileImageResolver` で参照先を組み立てるのが基本の使い方。
+ * - web: パッケージ同梱の PNG（`assets/tiles/`）を自分の公開ディレクトリへ置き
+ *   （必要なら縮小・WebP 化して）、`createTileImageResolver` で参照先を組み立てる
+ * - React Native: `@pai-forge/mahjong-react-ui/bundled-images` の
+ *   `resolveBundledTileImage`（base64 の data URI）を渡す
+ *
+ * 画像本体はメインのエントリに含めない。以前は Provider が無いときに同梱画像へ
+ * フォールバックしていたが、そのためにメインのエントリが 35 枚の data URI
+ * （2MB 超）を抱え、静的ファイルに切り替えたアプリでも牌を描かないページまで
+ * 画像本体をバンドルに載せていた。
  *
  * @example
  * ```tsx
@@ -57,11 +59,21 @@ export const TileImageProvider: FC<TileImageProviderProps> = ({
 /**
  * 牌の種類に対応する画像の参照先を返す
  *
- * `TileImageProvider` の配下ならその `resolve`、無ければ同梱画像。
+ * `TileImageProvider` の配下で呼ぶこと。Provider が無ければ例外を投げる
+ * （同梱画像へのフォールバックは持たない。理由は {@link TileImageProvider}）。
  */
 export function useTileImage(kind: TileImageKind): TileImageSource {
   const resolve = useContext(TileImageContext);
-  return resolve ? resolve(kind) : getBundledTileImage(kind);
+  if (resolve === undefined) {
+    throw new Error(
+      "TileImageProvider が見つかりません。牌を描くアプリのルートを " +
+        "<TileImageProvider resolve={...}> で囲んでください。resolve には " +
+        "createTileImageResolver({ baseUrl })（静的ファイル）か、" +
+        "@pai-forge/mahjong-react-ui/bundled-images の resolveBundledTileImage" +
+        "（同梱画像）を渡します。",
+    );
+  }
+  return resolve(kind);
 }
 
 /** `TileImageSource` を Web の `<img src>` に渡せる文字列にする */

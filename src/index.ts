@@ -1,7 +1,7 @@
 // Components
 export { Hai, HaiBack, Furo, Tehai } from "./components";
 
-// Tile images（画像の参照先の差し替え）
+// Tile images（画像の参照先）。画像本体は別エントリ `./bundled-images`
 export {
   TileImageProvider,
   useTileImage,
@@ -17,9 +17,8 @@ export type {
 } from "./components";
 export {
   TILE_IMAGE_FILE_NAMES,
-  getBundledTileImage,
   type TileImageKind,
-} from "./assets/tiles";
+} from "./assets/tiles/file-names";
 
 // Types
 export type {

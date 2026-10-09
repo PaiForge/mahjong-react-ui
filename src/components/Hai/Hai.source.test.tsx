@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render } from "@testing-library/react";
+import { renderWithTileImages } from "../../test/render-with-tile-images";
 import { HaiKind } from "@pai-forge/riichi-mahjong";
 import type * as ReactNative from "react-native";
 import { TileImageProvider } from "../TileImageProvider";
@@ -27,12 +27,12 @@ const lastSource = (): unknown => receivedSources.at(-1);
 
 describe("Hai が Image に渡す source", () => {
   it("既定（同梱画像）でも { uri } の形で渡す", () => {
-    render(<Hai hai={HaiKind.ManZu1} />);
+    renderWithTileImages(<Hai hai={HaiKind.ManZu1} />);
     expect(lastSource()).toEqual({ uri: expect.any(String) as string });
   });
 
   it("resolver が文字列を返しても { uri } に揃える", () => {
-    render(
+    renderWithTileImages(
       <TileImageProvider resolve={() => "/tiles/Man1.webp"}>
         <Hai hai={HaiKind.ManZu1} />
       </TileImageProvider>,
@@ -41,7 +41,7 @@ describe("Hai が Image に渡す source", () => {
   });
 
   it("resolver が { uri } を返せばそのまま渡す", () => {
-    render(
+    renderWithTileImages(
       <TileImageProvider
         resolve={() => ({ uri: "https://cdn.example.com/Man1.png" })}
       >

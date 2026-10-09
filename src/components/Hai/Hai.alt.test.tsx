@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { screen } from "@testing-library/react";
+import { renderWithTileImages } from "../../test/render-with-tile-images";
 import { HaiKind } from "@pai-forge/riichi-mahjong";
 import type * as ReactNative from "react-native";
 
@@ -27,17 +28,19 @@ import { Hai } from "./Hai";
 
 describe("Hai の alt", () => {
   it("既定で牌の名前になる", () => {
-    render(<Hai hai={HaiKind.ManZu1} />);
+    renderWithTileImages(<Hai hai={HaiKind.ManZu1} />);
     expect(screen.getByAltText("一萬")).toBeInTheDocument();
   });
 
   it("alt を渡せばそれを使う", () => {
-    render(<Hai hai={HaiKind.Ton} alt="場風" />);
+    renderWithTileImages(<Hai hai={HaiKind.Ton} alt="場風" />);
     expect(screen.getByAltText("場風")).toBeInTheDocument();
   });
 
   it("空文字を渡せば装飾扱い（読み上げない）にできる", () => {
-    const { container } = render(<Hai hai={HaiKind.Ton} alt="" />);
+    const { container } = renderWithTileImages(
+      <Hai hai={HaiKind.Ton} alt="" />,
+    );
     expect(container.querySelector("img")?.getAttribute("alt")).toBe("");
   });
 });

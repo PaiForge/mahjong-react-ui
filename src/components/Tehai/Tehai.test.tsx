@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
+import { renderWithTileImages } from "../../test/render-with-tile-images";
 import {
   HaiKind,
   MentsuType,
@@ -10,7 +11,7 @@ import { Tehai } from "./Tehai";
 
 describe("Tehai", () => {
   it("should render closed hand tiles", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Tehai
         tehai={{
           closed: [
@@ -37,7 +38,7 @@ describe("Tehai", () => {
   });
 
   it("should render tsumo tile separately", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Tehai
         tehai={{
           closed: [HaiKind.ManZu1, HaiKind.ManZu2, HaiKind.ManZu3],
@@ -51,7 +52,7 @@ describe("Tehai", () => {
   });
 
   it("should render exposed melds", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Tehai
         tehai={{
           closed: [
@@ -81,7 +82,7 @@ describe("Tehai", () => {
 
   it("should handle tile clicks", () => {
     const handleClick = vi.fn();
-    render(
+    renderWithTileImages(
       <Tehai
         tehai={{
           closed: [HaiKind.ManZu1, HaiKind.ManZu2],
@@ -101,7 +102,7 @@ describe("Tehai", () => {
   });
 
   it("should show selected tiles", () => {
-    const { container } = render(
+    const { container } = renderWithTileImages(
       <Tehai
         tehai={{
           closed: [HaiKind.ManZu1, HaiKind.ManZu2, HaiKind.ManZu3],
