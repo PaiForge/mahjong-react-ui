@@ -14,8 +14,20 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
+    "./bundled-images": {
+      "types": "./dist/bundled-images.d.ts",
+      "import": "./dist/bundled-images.js",
+      "require": "./dist/bundled-images.cjs"
+    },
     "./styles.css": "./dist/mahjong-react-ui.css",
     "./assets/*": "./assets/*"
+  },
+  "typesVersions": {
+    "*": {
+      "bundled-images": [
+        "./dist/bundled-images.d.ts"
+      ]
+    }
   },
   "sideEffects": [
     "**/*.css"
@@ -26,7 +38,7 @@
   ],
   "scripts": {
     "dev": "storybook dev -p 6006",
-    "build": "vite build && tsc --project tsconfig.build.json && node scripts/copy-tile-assets.mjs",
+    "build": "vite build && tsc --project tsconfig.build.json && node scripts/copy-tile-assets.mjs && node scripts/assert-no-inline-images.mjs",
     "build:storybook": "storybook build",
     "test": "vitest",
     "test:coverage": "vitest --coverage",

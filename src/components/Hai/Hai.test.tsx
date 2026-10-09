@@ -1,41 +1,42 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
+import { renderWithTileImages } from "../../test/render-with-tile-images";
 import { HaiKind } from "@pai-forge/riichi-mahjong";
 import { Hai } from "./Hai";
 
 describe("Hai", () => {
   it("should render a manzu tile", () => {
-    render(<Hai hai={HaiKind.ManZu1} />);
+    renderWithTileImages(<Hai hai={HaiKind.ManZu1} />);
     const img = document.querySelector("img");
     expect(img).toBeInTheDocument();
   });
 
   it("should render a pinzu tile", () => {
-    render(<Hai hai={HaiKind.PinZu5} />);
+    renderWithTileImages(<Hai hai={HaiKind.PinZu5} />);
     const img = document.querySelector("img");
     expect(img).toBeInTheDocument();
   });
 
   it("should render a souzu tile", () => {
-    render(<Hai hai={HaiKind.SouZu9} />);
+    renderWithTileImages(<Hai hai={HaiKind.SouZu9} />);
     const img = document.querySelector("img");
     expect(img).toBeInTheDocument();
   });
 
   it("should render a jihai tile", () => {
-    render(<Hai hai={HaiKind.Chun} />);
+    renderWithTileImages(<Hai hai={HaiKind.Chun} />);
     const img = document.querySelector("img");
     expect(img).toBeInTheDocument();
   });
 
   it("押せない牌は button を名乗らない", () => {
-    render(<Hai hai={HaiKind.ManZu1} />);
+    renderWithTileImages(<Hai hai={HaiKind.ManZu1} />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("should handle click events", () => {
     const handleClick = vi.fn();
-    render(<Hai hai={HaiKind.ManZu1} onClick={handleClick} />);
+    renderWithTileImages(<Hai hai={HaiKind.ManZu1} onClick={handleClick} />);
 
     const button = screen.getByRole("button");
     fireEvent.click(button);
@@ -45,13 +46,17 @@ describe("Hai", () => {
 
   // react-native(-web) 実装では、状態はインラインスタイル（色・opacity・transform）で表現される
   it("should apply highlighted styling (yellow border)", () => {
-    const { container } = render(<Hai hai={HaiKind.ManZu1} highlighted />);
+    const { container } = renderWithTileImages(
+      <Hai hai={HaiKind.ManZu1} highlighted />,
+    );
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper.getAttribute("style")).toContain("rgb(250, 204, 21)");
   });
 
   it("should apply selected styling (blue border + lift)", () => {
-    const { container } = render(<Hai hai={HaiKind.ManZu1} selected />);
+    const { container } = renderWithTileImages(
+      <Hai hai={HaiKind.ManZu1} selected />,
+    );
     const wrapper = container.firstChild as HTMLElement;
     const style = wrapper.getAttribute("style") ?? "";
     expect(style).toContain("rgb(59, 130, 246)");
@@ -59,7 +64,9 @@ describe("Hai", () => {
   });
 
   it("should apply dimmed styling (opacity)", () => {
-    const { container } = render(<Hai hai={HaiKind.ManZu1} dimmed />);
+    const { container } = renderWithTileImages(
+      <Hai hai={HaiKind.ManZu1} dimmed />,
+    );
     const wrapper = container.firstChild as HTMLElement;
     expect(wrapper.getAttribute("style")).toContain("opacity: 0.5");
   });

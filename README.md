@@ -41,16 +41,17 @@ pnpm dev
 import { Hai, HaiKind } from '@pai-forge/mahjong-react-ui';
 
 function App() {
+  // 牌はルートの TileImageProvider（次の節）の配下で描く
   return <Hai hai={HaiKind.ManZu1} size="md" />;
 }
 ```
 
-### 牌画像を静的ファイルとして配信する
+### 牌画像の参照先を決める（必須）
 
-既定では `Hai` / `HaiBack` はパッケージに同梱した画像（base64 の data URI）を描きます。
-data URI は HTML / JS に画像本体ごと埋め込まれるため、牌を多く並べるページでは転送量が
-大きくなり、ブラウザのキャッシュにも乗りません。牌を多く描くアプリは
-`TileImageProvider` で参照先を静的ファイルに切り替えてください。
+`Hai` / `HaiBack` は `TileImageProvider` の配下でだけ描けます（Provider が無いと
+例外を投げます）。画像の参照先は利用側が `resolve` で決めます。
+
+#### web: 静的ファイルとして配信する
 
 1. パッケージ同梱の PNG（`node_modules/@pai-forge/mahjong-react-ui/assets/tiles/*.png`、
    600×800）を自分の公開ディレクトリへ置く。表示サイズに合わせて縮小・WebP 化してよい
@@ -82,6 +83,28 @@ function App() {
 ファイル名は `TILE_IMAGE_FILE_NAMES` が持ちます（裏面は `"back"`）。`resolve` は
 牌の種類を受け取って参照先を返す関数なので、CDN やサイズ別の出し分けも自由です。
 `Hai` の `alt` は省略時に牌の名前（`getHaiName`、例: 一萬・東）になります。
+
+#### React Native など、静的ファイルを配信できない環境: 同梱画像を使う
+
+画像本体（base64 の data URI、35 枚で 2MB 超）は別エントリ
+`@pai-forge/mahjong-react-ui/bundled-images` にあります。メインのエントリには
+入っていないので、静的ファイルに切り替えた web アプリのバンドルは太りません。
+
+```tsx
+import { Hai, HaiKind, TileImageProvider } from '@pai-forge/mahjong-react-ui';
+import { resolveBundledTileImage } from '@pai-forge/mahjong-react-ui/bundled-images';
+
+function App() {
+  return (
+    <TileImageProvider resolve={resolveBundledTileImage}>
+      <Hai hai={HaiKind.ManZu1} size="md" />
+    </TileImageProvider>
+  );
+}
+```
+
+web でこれを使うと、牌を並べるページの HTML / JS に画像本体がそのまま入り、
+ブラウザのキャッシュにも乗りません。web は静的ファイルの方を使ってください。
 
 `resolve` の戻り値（`TileImageSource`）は文字列か `{ uri }` です。自分で描くときは、
 web の `<img src>` には `toTileImageUri`、React Native の `Image` の `source` には

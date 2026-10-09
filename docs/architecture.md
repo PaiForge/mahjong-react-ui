@@ -16,8 +16,9 @@ src/
       [Component].test.tsx    # ユニットテスト
   types/            # 共有の型定義
   utils/            # 共有ユーティリティ関数
-  assets/tiles/     # 牌画像（PNG）と、牌の種類 → 画像の対応表
+  assets/tiles/     # 牌画像（PNG）。index.ts が画像本体、file-names.ts が牌の種類 → ファイル名の表
   index.ts          # 全てのコンポーネントと型をエクスポートするメインエントリポイント
+  bundled-images.ts # 同梱画像（data URI）だけを公開する別エントリ（`./bundled-images`）
 assets/tiles/       # ビルドで src/assets/tiles の PNG を写した配布用（git 管理外）
 ```
 
@@ -44,16 +45,30 @@ assets/tiles/       # ビルドで src/assets/tiles の PNG を写した配布�
 複雑なドメインロジック（シャンテン計算、役判定など）は `riichi-mahjong` ライブラリに委譲します。このUIパッケージは、**レンダリング** と **ユーザーインタラクション** にのみ焦点を当てます。
 
 ### 5. 牌画像の参照先
-`Hai` / `HaiBack` は画像の参照先を `useTileImage` で引き、既定はビルド時に
-base64 化された同梱画像（Vite のライブラリモードは画像を data URI に埋め込む）です。
+`Hai` / `HaiBack` は画像の参照先を `useTileImage` で引きます。参照先を決めるのは
+利用側のルートに置く `TileImageProvider` の `resolve` で、Provider が無ければ
+例外を投げます（同梱画像へのフォールバックは持ちません）。
 参照先（`TileImageSource`）は文字列か `{ uri }` で、`<img src>` に渡すときは
 `toTileImageUri`、React Native の `Image` に渡すときは `toTileImageSource` で形を揃えます
 （React Native の `Image` は文字列の `source` を同梱画像の ID とみなし、何も描きません）。
-data URI は利用側の HTML / JS に画像本体ごと入り、キャッシュにも乗らないため、
-牌を多く並べるアプリ向けに `TileImageProvider` で参照先を差し替えられます。
-同じ画像を `assets/tiles/` に PNG として同梱し、`TILE_IMAGE_FILE_NAMES` で
-牌の種類とファイル名を対応付けています。画像の取得方法（静的ファイル・CDN・
-縮小版）はライブラリが決めず、利用側の `resolve` に委ねます。
+
+画像本体は 2 つの形で配ります。
+
+- `assets/tiles/*.png`（npm パッケージに同梱）。web はこれを自分の公開ディレクトリに
+  置き、`createTileImageResolver` と `TILE_IMAGE_FILE_NAMES`（`src/assets/tiles/file-names.ts`）
+  で参照先を組み立てる
+- `@pai-forge/mahjong-react-ui/bundled-images`（`src/bundled-images.ts`）。Vite の
+  ライブラリモードが PNG を base64 の data URI に埋め込んだもので、静的ファイルを
+  配信できない React Native 向け
+
+画像本体をメインのエントリから切り離しているのは、0.5.0 まで `useTileImage` が
+同梱画像へフォールバックしていたために、メインのエントリが 35 枚の data URI
+（2MB 超）を抱え、静的ファイルに切り替えた web アプリでも牌を描かないページまで
+画像本体をバンドルに載せていたためです（バンドラの tree shaking では落ちない —
+`Hai` → `useTileImage` → 画像の参照が静的に繋がっている）。`index.ts` 側の
+モジュールが画像を参照しないことは `scripts/assert-no-inline-images.mjs` が
+ビルドの最後に検査します。画像の取得方法（静的ファイル・CDN・縮小版）は
+ライブラリが決めず、利用側の `resolve` に委ねます。
 
 ## 依存関係
 - `riichi-mahjong`: コアロジックライブラリ（現在はローカル依存）。
