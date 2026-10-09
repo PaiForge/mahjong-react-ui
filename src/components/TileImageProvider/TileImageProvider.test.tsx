@@ -1,7 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { render } from "@testing-library/react";
 import { HaiKind } from "@pai-forge/riichi-mahjong";
-import { TILE_IMAGE_FILE_NAMES } from "../../assets/tiles";
+import { TILE_IMAGE_FILE_NAMES } from "../../assets/tiles/file-names";
+import { resolveBundledTileImage } from "../../bundled-images";
 import { Hai } from "../Hai";
 import { HaiBack } from "../HaiBack";
 import {
@@ -81,12 +82,26 @@ describe("TileImageProvider", () => {
     );
   });
 
-  it("Provider が無ければ同梱画像を描く", () => {
-    const { container } = render(<Hai hai={HaiKind.ManZu1} />);
+  it("同梱画像の resolver を渡せば同梱の画像を描く", () => {
+    const { container } = render(
+      <TileImageProvider resolve={resolveBundledTileImage}>
+        <Hai hai={HaiKind.ManZu1} />
+      </TileImageProvider>,
+    );
     // ビルドでは data URI に埋め込まれるが、テスト（Vite 開発時）は
     // ファイルの URL として解決されるので、どちらでも同梱の Man1 であることを見る
     expect(container.querySelector("img")?.getAttribute("src")).toMatch(
       /Man1\.png$|^data:image\/png;base64,/,
     );
+  });
+
+  it("Provider が無ければ描けない（同梱画像へ黙って戻らない）", () => {
+    // 戻ると、メインのエントリが画像本体を抱える構造に逆戻りする。
+    // React が例外を console.error にも流すので、その出力は黙らせる
+    const silence = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    expect(() => render(<Hai hai={HaiKind.ManZu1} />)).toThrow(
+      /TileImageProvider/,
+    );
+    silence.mockRestore();
   });
 });
